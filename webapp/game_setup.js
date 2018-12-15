@@ -153,50 +153,44 @@ var setup = function() {
 
     // Touch listeners for mobile.
     qbutton.addEventListener('touchstart', function(event) {
-        event.preventDefault();
         q= true;
         qbutton.style.borderStyle = "inset";
     }, false);
     qbutton.addEventListener('touchend', function(event) {
-        event.preventDefault();
         q= false;
         qbutton.style.borderStyle = "outset";
     }, false);
 
     wbutton.addEventListener('touchstart', function(event) {
-        event.preventDefault();
         w= true;
         wbutton.style.borderStyle = "inset";
     }, false);
     wbutton.addEventListener('touchend', function(event) {
-        event.preventDefault();
         w= false;
         wbutton.style.borderStyle = "outset";
     }, false);
 
     obutton.addEventListener('touchstart', function(event) {
-        event.preventDefault();
         o= true;
         obutton.style.borderStyle = "inset";
     }, false);
     obutton.addEventListener('touchend', function(event) {
-        event.preventDefault();
         o= false;
         obutton.style.borderStyle = "outset";
     }, false);
 
 
     pbutton.addEventListener('touchstart', function(event) {
-        event.preventDefault();
         p= true;
         pbutton.style.borderStyle = "inset";
     }, false);
     pbutton.addEventListener('touchend', function(event) {
-        event.preventDefault();
         p= false;
         pbutton.style.borderStyle = "outset";
     }, false);
-    
+
+
+
 
     setInterval(loop, frameDelay);
 };

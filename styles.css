@@ -20,7 +20,8 @@ body {
 }
 .fixed{
     background-color:#4F628E;
-    width: 50px;
+    width: 100px;
+    height: 100px;
     border-style:outset;
     border-radius:2px;
 }

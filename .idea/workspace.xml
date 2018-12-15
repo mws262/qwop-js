@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d065f73-b071-4988-806f-0e71e35fc278" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapp/game_setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/game_setup.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -29,8 +30,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/styles.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="266">
-                  <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+                <state relative-caret-position="437">
+                  <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
                 </state>
               </provider>
             </entry>
@@ -75,8 +76,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/webapp/game_setup.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="570">
-                  <caret line="198" column="4" selection-start-line="198" selection-start-column="4" selection-end-line="198" selection-end-column="4" />
+                <state relative-caret-position="190">
+                  <caret line="97" column="14" selection-start-line="97" selection-start-column="14" selection-end-line="97" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -121,9 +122,9 @@
         <option value="$PROJECT_DIR$/webapp/README.md" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/webapp/game_setup.js" />
+        <option value="$PROJECT_DIR$/webapp/game_setup.js" />
         <option value="$PROJECT_DIR$/styles.css" />
-        <option value="$PROJECT_DIR$/webapp/game_setup.js" />
-        <option value="$PROJECT_DIR$/webapp/game_setup.js" />
       </list>
     </option>
   </component>
@@ -223,12 +224,12 @@
       <option name="presentableId" value="Default" />
       <updated>1544801726877</updated>
       <workItem from="1544801729448" duration="13724000" />
-      <workItem from="1544881743226" duration="4576000" />
+      <workItem from="1544881743226" duration="4906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18300000" />
+    <option name="totallyTimeSpent" value="18630000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1200" y="158" width="2560" height="1442" extended-state="6" />
@@ -323,13 +324,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -337,17 +331,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/styles.css">
+    <entry file="file://$PROJECT_DIR$/webapp/game_setup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+        <state relative-caret-position="190">
+          <caret line="97" column="14" selection-start-line="97" selection-start-column="14" selection-end-line="97" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webapp/game_setup.js">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="198" column="4" selection-start-line="198" selection-start-column="4" selection-end-line="198" selection-end-column="4" />
+        <state relative-caret-position="76">
+          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
         </state>
       </provider>
     </entry>

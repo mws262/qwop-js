@@ -8,7 +8,7 @@ var ctx;
 var width;
 var height;
 var qwopGame = new game.GameSingleThread();
-var scaling = 20;
+var scaling = 17;
 var xOffset = 100;
 var yOffset = 300;
 var q = false;
@@ -75,7 +75,7 @@ var loop = function() {
 
 var setCanvasDimensions = function(){
     canvas.width  = canvas.offsetWidth;
-    canvas.height = 350;
+    canvas.height = 300;
     width = canvas.width;
     height = canvas.height;
     xOffset = width/2;

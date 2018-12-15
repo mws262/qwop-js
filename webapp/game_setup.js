@@ -93,6 +93,9 @@ var setup = function() {
     canvas.style.height='100%';
     setCanvasDimensions();
 
+    document.addEventListener('touchmove', function (event) {
+        if (event.scale !== 1) { event.preventDefault(); }
+    }, false);
 
     var qbutton = document.getElementById('qbutton');
     var wbutton = document.getElementById('wbutton');

@@ -6,6 +6,13 @@ div{
 body {
     margin: 0px;
     padding: 0px;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action:manipulation;
 }
 .container{
     background-color:#2E4272;
@@ -16,12 +23,6 @@ body {
     width: 50px;
     border-style:outset;
     border-radius:2px;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 .flex-item{
     background-color:#7887AB;

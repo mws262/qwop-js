@@ -149,39 +149,39 @@ var setup = function() {
     }, false);
 
     // Touch listeners for mobile.
-    qbutton.addEventListener('ontouchstart', function(event) {
+    qbutton.addEventListener('touchstart', function(event) {
         q= true;
         qbutton.style.borderStyle = "inset";
     }, false);
-    qbutton.addEventListener('ontouchend', function(event) {
+    qbutton.addEventListener('touchend', function(event) {
         q= false;
         qbutton.style.borderStyle = "outset";
     }, false);
 
-    wbutton.addEventListener('ontouchstart', function(event) {
+    wbutton.addEventListener('touchstart', function(event) {
         w= true;
         wbutton.style.borderStyle = "inset";
     }, false);
-    wbutton.addEventListener('ontouchend', function(event) {
+    wbutton.addEventListener('touchend', function(event) {
         w= false;
         wbutton.style.borderStyle = "outset";
     }, false);
 
-    obutton.addEventListener('ontouchstart', function(event) {
+    obutton.addEventListener('touchstart', function(event) {
         o= true;
         obutton.style.borderStyle = "inset";
     }, false);
-    obutton.addEventListener('ontouchend', function(event) {
+    obutton.addEventListener('touchend', function(event) {
         o= false;
         obutton.style.borderStyle = "outset";
     }, false);
 
 
-    pbutton.addEventListener('ontouchstart', function(event) {
+    pbutton.addEventListener('touchstart', function(event) {
         p= true;
         pbutton.style.borderStyle = "inset";
     }, false);
-    pbutton.addEventListener('ontouchend', function(event) {
+    pbutton.addEventListener('touchend', function(event) {
         p= false;
         pbutton.style.borderStyle = "outset";
     }, false);

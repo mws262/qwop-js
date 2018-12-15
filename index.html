@@ -2,15 +2,17 @@
 <html>
 <head>
     <title>QWOP</title>
-    <style>
-        body {
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<canvas id="canvas" width="800" height="800"></canvas>
+<canvas id="canvas" width="500" height="300"></canvas>
+<div class="container">
+    <div id="qbutton" class="fixed">Q</div>
+    <div id="wbutton" class="fixed">W</div>
+    <div class="flex-item"></div>
+    <div id="obutton" class="fixed">O</div>
+    <div id="pbutton" class="fixed">P</div>
+</div>
 <script src="target/js/bundle.js"></script>
 <script src="webapp/game_setup.js"></script>
 </body>

@@ -75,11 +75,11 @@ var loop = function() {
 
 var setCanvasDimensions = function(){
     canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.height = 400;//canvas.offsetHeight;
     width = canvas.width;
     height = canvas.height;
     xOffset = width/2;
-    yOffset = Math.min(250, height/3);
+    yOffset = Math.min(300, height/2);
 };
 
 var setup = function() {
@@ -93,20 +93,30 @@ var setup = function() {
     canvas.style.height='100%';
     setCanvasDimensions();
 
+
+    var qbutton = document.getElementById('qbutton');
+    var wbutton = document.getElementById('wbutton');
+    var obutton = document.getElementById('obutton');
+    var pbutton = document.getElementById('pbutton');
+
     // QWOP and R reset key listeners.
     window.addEventListener('keydown', function(event) {
         switch (event.key) {
             case 'q':
                 q = true;
+                qbutton.style.borderStyle = "inset";
                 break;
             case 'w':
                 w = true;
+                wbutton.style.borderStyle = "inset";
                 break;
             case 'o':
                 o = true;
+                obutton.style.borderStyle = "inset";
                 break;
             case 'p':
                 p = true;
+                pbutton.style.borderStyle = "inset";
                 break;
             case 'r':
                 q = false;
@@ -121,18 +131,63 @@ var setup = function() {
         switch (event.key) {
             case 'q':
                 q = false;
+                qbutton.style.borderStyle = "outset";
                 break;
             case 'w':
                 w = false;
+                wbutton.style.borderStyle = "outset";
                 break;
             case 'o':
                 o = false;
+                obutton.style.borderStyle = "outset";
                 break;
             case 'p':
                 p = false;
+                pbutton.style.borderStyle = "outset";
                 break;
         }
     }, false);
+
+    // Touch listeners for mobile.
+    qbutton.addEventListener('ontouchstart', function(event) {
+        q= true;
+        qbutton.style.borderStyle = "inset";
+    }, false);
+    qbutton.addEventListener('ontouchend', function(event) {
+        q= false;
+        qbutton.style.borderStyle = "outset";
+    }, false);
+
+    wbutton.addEventListener('ontouchstart', function(event) {
+        w= true;
+        wbutton.style.borderStyle = "inset";
+    }, false);
+    wbutton.addEventListener('ontouchend', function(event) {
+        w= false;
+        wbutton.style.borderStyle = "outset";
+    }, false);
+
+    obutton.addEventListener('ontouchstart', function(event) {
+        o= true;
+        obutton.style.borderStyle = "inset";
+    }, false);
+    obutton.addEventListener('ontouchend', function(event) {
+        o= false;
+        obutton.style.borderStyle = "outset";
+    }, false);
+
+
+    pbutton.addEventListener('ontouchstart', function(event) {
+        p= true;
+        pbutton.style.borderStyle = "inset";
+    }, false);
+    pbutton.addEventListener('ontouchend', function(event) {
+        p= false;
+        pbutton.style.borderStyle = "outset";
+    }, false);
+
+
+
 
     setInterval(loop, frameDelay);
 };

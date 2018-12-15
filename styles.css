@@ -4,7 +4,7 @@ div{
     padding: 10px;
     text-align: center;
     font-size: 16px;
-    font-size: 4vw;
+    font-size: calc(7px + 2vw);
 }
 body {
     margin: 0px;
@@ -24,9 +24,9 @@ body {
 .fixed{
     background-color:#4F628E;
     width: 25%;
-    max-width: 1.2cm;
+    max-width: 5rem;
     height: 25%;
-    max-height: 1.2cm;
+    max-height: 5rem;
     border-style:outset;
     border-width: 5px;
     border-radius:10px;

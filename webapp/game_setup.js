@@ -75,7 +75,7 @@ var loop = function() {
 
 var setCanvasDimensions = function(){
     canvas.width  = canvas.offsetWidth;
-    canvas.height = 350;//canvas.offsetHeight;
+    canvas.height = 350;
     width = canvas.width;
     height = canvas.height;
     xOffset = width/2;
@@ -93,6 +93,7 @@ var setup = function() {
     canvas.style.height='100%';
     setCanvasDimensions();
 
+    // Trying to disable pinch zoom. Doesn't seem to work on IOS.
     document.addEventListener('touchmove', function (event) {
         if (event.scale !== 1) { event.preventDefault(); }
     }, false);
@@ -101,6 +102,7 @@ var setup = function() {
     var wbutton = document.getElementById('wbutton');
     var obutton = document.getElementById('obutton');
     var pbutton = document.getElementById('pbutton');
+    var resetbutton = document.getElementById('resetbutton');
 
     // QWOP and R reset key listeners.
     window.addEventListener('keydown', function(event) {
@@ -122,6 +124,7 @@ var setup = function() {
                 pbutton.style.borderStyle = "inset";
                 break;
             case 'r':
+                resetbutton.style.borderStyle = "inset";
                 q = false;
                 w = false;
                 o = false;
@@ -147,6 +150,9 @@ var setup = function() {
             case 'p':
                 p = false;
                 pbutton.style.borderStyle = "outset";
+                break;
+            case 'r':
+                resetbutton.style.borderStyle = "outset";
                 break;
         }
     }, false);
@@ -189,8 +195,31 @@ var setup = function() {
         pbutton.style.borderStyle = "outset";
     }, false);
 
+    resetbutton.addEventListener('touchstart', function(event) {
+        q = false;
+        w = false;
+        o = false;
+        p = false;
+        qwopGame.makeNewWorld();
+        resetbutton.style.borderStyle = "inset";
+    }, false);
 
+    resetbutton.addEventListener('touchend', function(event) {
+        resetbutton.style.borderStyle = "outset";
+    }, false);
 
+    resetbutton.addEventListener('mousedown', function(event) {
+        q = false;
+        w = false;
+        o = false;
+        p = false;
+        qwopGame.makeNewWorld();
+        resetbutton.style.borderStyle = "inset";
+    }, false);
+
+    resetbutton.addEventListener('mouseup', function(event) {
+        resetbutton.style.borderStyle = "outset";
+    }, false);
 
     setInterval(loop, frameDelay);
 };

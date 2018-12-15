@@ -24,7 +24,9 @@ body {
 .fixed{
     background-color:#4F628E;
     width: 15%;
-    height: 100px;
+    max-width: 100px;
+    height: 15%;
+    max-height: 100px;
     border-style:outset;
     border-width: 5px;
     border-radius:10px;

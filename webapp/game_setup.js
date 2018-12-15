@@ -75,11 +75,11 @@ var loop = function() {
 
 var setCanvasDimensions = function(){
     canvas.width  = canvas.offsetWidth;
-    canvas.height = 400;//canvas.offsetHeight;
+    canvas.height = 350;//canvas.offsetHeight;
     width = canvas.width;
     height = canvas.height;
     xOffset = width/2;
-    yOffset = Math.min(300, height/2);
+    yOffset = Math.min(300, height/2.2);
 };
 
 var setup = function() {

@@ -2,6 +2,9 @@ div{
     color: #fff;
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-size: 4vw;
 }
 body {
     margin: 0px;
@@ -23,7 +26,8 @@ body {
     width: 15%;
     height: 100px;
     border-style:outset;
-    border-radius:2px;
+    border-width: 5px;
+    border-radius:10px;
 }
 .flex-item{
     background-color:#7887AB;

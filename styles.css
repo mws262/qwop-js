@@ -23,10 +23,10 @@ body {
 }
 .fixed{
     background-color:#4F628E;
-    width: 15%;
-    max-width: 100px;
-    height: 15%;
-    max-height: 100px;
+    width: 25%;
+    max-width: 1.2cm;
+    height: 25%;
+    max-height: 1.2cm;
     border-style:outset;
     border-width: 5px;
     border-radius:10px;

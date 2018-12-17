@@ -784,6 +784,12 @@ public class GameSingleThread {
         noFeet = usePointFeet;
     }
 
+    public void setBodyInertiaMultiplier(float multiplier) {
+        MassData massData = new MassData();
+        massData.mass = torsoMassData.mass;
+        massData.I = torsoMassData.I * multiplier;
+        torsoBody.setMass(massData);
+    }
     /**
      * Get vertices for debug drawing. Each array in the list will have:
      * 8 floats for rectangles (x1,y1,x2,y2,...).

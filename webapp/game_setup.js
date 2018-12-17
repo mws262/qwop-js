@@ -10,6 +10,7 @@ var height;
 var qwopGame = new game.GameSingleThread();
 var yGravitySlider = document.getElementById('yGravitySlider');
 var maxTorqueMultSlider = document.getElementById('maxTorqueMultSlider');
+var torsInertiaMultSlider = document.getElementById('torsInertiaMultSlider');
 var pointFeetCheckbox = document.getElementById('usePointFeet');
 var actionQueue = new actions.ActionQueue();
 var sequenceTextbox = document.getElementById('sequenceTextbox');
@@ -35,7 +36,6 @@ var loop = function() {
     }
 
     qwopGame.stepGame(q, w, o, p);
-
 
     // Get the body shape vertices from the game.
     var bodyVerts = qwopGame.getDebugVertices();
@@ -100,6 +100,7 @@ var setCanvasDimensions = function(){
 };
 
 var resetRunner = function() {
+    actionQueue = new actions.ActionQueue();
     q = false;
     w = false;
     o = false;
@@ -107,7 +108,7 @@ var resetRunner = function() {
     qwopGame.makeNewWorld();
     qwopGame.setGravity(0., parseFloat(yGravitySlider.value));
     qwopGame.setMaxTorqueMultiplier(parseFloat(maxTorqueMultSlider.value) / 10);
-};
+    qwopGame.setBodyInertiaMultiplier(parseFloat(torsInertiaMultSlider.value) / 10)};
 
 var setup = function() {
 
@@ -133,6 +134,7 @@ var setup = function() {
 
     var yGravityVal = document.getElementById('yGravityVal');
     var maxTorqueMultVal = document.getElementById('maxTorqueMultVal');
+    var torsoInertiaMultVal = document.getElementById('torsoInertiaMultVal');
 
     yGravityVal.innerHTML = yGravitySlider.value;
 
@@ -144,6 +146,11 @@ var setup = function() {
     maxTorqueMultSlider.oninput = function() {
         maxTorqueMultVal.innerHTML = this.value / 10;
         qwopGame.setMaxTorqueMultiplier(parseFloat(this.value) / 10);
+    };
+
+    torsInertiaMultSlider.oninput = function() {
+        torsoInertiaMultVal.innerHTML = this.value / 10;
+        qwopGame.setBodyInertiaMultiplier(parseFloat(this.value) / 10);
     };
 
     // Turn on/off point feet (resets the game too).
@@ -158,7 +165,7 @@ var setup = function() {
         var currentKeyPos = 0;
         var keyOrder = [[false, false, false, false],
         [false, true, true, false], [false, false, false, false], [true, false, false, true]];
-
+        resetRunner();
         for (let idx = 0; idx < sequenceStrArray.length; idx++) {
             actionQueue.addAction(new actions.Action(parseInt(sequenceStrArray[idx]),
                 keyOrder[currentKeyPos][0],
@@ -168,7 +175,6 @@ var setup = function() {
             currentKeyPos++;
             currentKeyPos %= 4;
         }
-        resetRunner();
     };
 
 

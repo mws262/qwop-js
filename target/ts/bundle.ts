@@ -1,4 +1,501 @@
 /* Generated from Java with JSweet 2.2.0-SNAPSHOT - http://www.jsweet.org */
+namespace actions {
+    /**
+     * Create an action containing the time to hold and the key combination.
+     * 
+     * @param {number} totalTimestepsToHold Number of timesteps to hold the keys associated with this Action.
+     * @param {boolean} Q                    Whether the Q key is pressed during this action.
+     * @param {boolean} W                    Whether the W key is pressed during this action.
+     * @param {boolean} O                    Whether the O key is pressed during this action.
+     * @param {boolean} P                    Whether the P key is pressed during this action.
+     * @class
+     * @author Matt
+     */
+    export class Action {
+        static serialVersionUID : number = 2;
+
+        /**
+         * Total number of Box2d timesteps that this key combination should be held.
+         */
+        /*private*/ timestepsTotal : number;
+
+        /**
+         * Number of timesteps left to hold this command.
+         */
+        /*private*/ timestepsRemaining : number;
+
+        /**
+         * Which of the QWOP keys are pressed?
+         */
+        /*private*/ keysPressed : boolean[];
+
+        /**
+         * Is this the immutable original or a derived, mutable copy. A little bit hacky, but a way of avoiding threading
+         * issues without major modifications.
+         */
+        /*private*/ isExecutableCopy : boolean = false;
+
+        public constructor(totalTimestepsToHold? : any, Q? : any, W? : any, O? : any, P? : any) {
+            if(((typeof totalTimestepsToHold === 'number') || totalTimestepsToHold === null) && ((typeof Q === 'boolean') || Q === null) && ((typeof W === 'boolean') || W === null) && ((typeof O === 'boolean') || O === null) && ((typeof P === 'boolean') || P === null)) {
+                let __args = arguments;
+                {
+                    let __args = arguments;
+                    let keysPressed : any = [Q, W, O, P];
+                    if(this.timestepsTotal===undefined) this.timestepsTotal = 0;
+                    if(this.timestepsRemaining===undefined) this.timestepsRemaining = 0;
+                    if(this.keysPressed===undefined) this.keysPressed = null;
+                    this.isExecutableCopy = false;
+                    if(this.timestepsTotal===undefined) this.timestepsTotal = 0;
+                    if(this.timestepsRemaining===undefined) this.timestepsRemaining = 0;
+                    if(this.keysPressed===undefined) this.keysPressed = null;
+                    (() => {
+                        if(keysPressed.length !== 4) throw Object.defineProperty(new Error("A QWOP action should have booleans for exactly 4 keys. Tried to create one with a boolean array of size: " + keysPressed.length), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                        if(totalTimestepsToHold < 0) throw Object.defineProperty(new Error("New QWOP Action must have non-negative duration. Given: " + totalTimestepsToHold), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                        this.timestepsTotal = totalTimestepsToHold;
+                        this.keysPressed = keysPressed;
+                        this.timestepsRemaining = this.timestepsTotal;
+                    })();
+                }
+            } else if(((typeof totalTimestepsToHold === 'number') || totalTimestepsToHold === null) && ((Q != null && Q instanceof <any>Array && (Q.length==0 || Q[0] == null ||(typeof Q[0] === 'boolean'))) || Q === null) && W === undefined && O === undefined && P === undefined) {
+                let __args = arguments;
+                let keysPressed : any = __args[1];
+                if(this.timestepsTotal===undefined) this.timestepsTotal = 0;
+                if(this.timestepsRemaining===undefined) this.timestepsRemaining = 0;
+                if(this.keysPressed===undefined) this.keysPressed = null;
+                this.isExecutableCopy = false;
+                if(this.timestepsTotal===undefined) this.timestepsTotal = 0;
+                if(this.timestepsRemaining===undefined) this.timestepsRemaining = 0;
+                if(this.keysPressed===undefined) this.keysPressed = null;
+                (() => {
+                    if(keysPressed.length !== 4) throw Object.defineProperty(new Error("A QWOP action should have booleans for exactly 4 keys. Tried to create one with a boolean array of size: " + keysPressed.length), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                    if(totalTimestepsToHold < 0) throw Object.defineProperty(new Error("New QWOP Action must have non-negative duration. Given: " + totalTimestepsToHold), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                    this.timestepsTotal = totalTimestepsToHold;
+                    this.keysPressed = keysPressed;
+                    this.timestepsRemaining = this.timestepsTotal;
+                })();
+            } else throw new Error('invalid overload');
+        }
+
+        /**
+         * Return the keys for this action and decrement the timestepsRemaining.
+         * 
+         * @return {Array} A 4-element array containing true/false for whether each of the Q, W, O, and P keys are pressed.
+         */
+        public poll() : boolean[] {
+            if(!this.isExecutableCopy) throw Object.defineProperty(new Error("Trying to execute the base version of the Action. Due to multi-threading, this REALLY screws with the counters in the action. Call getCopy for the version you should use."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            if(this.timestepsRemaining <= 0) throw Object.defineProperty(new Error("Tried to poll an action which was already completed. Call hasNext() to check before calling poll()."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.IndexOutOfBoundsException','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            this.timestepsRemaining--;
+            return this.keysPressed;
+        }
+
+        /**
+         * Return the keys pressed in this action without changing the number of timesteps remaining in this action.
+         * 
+         * @return {Array} A 4-element array containing true/false for whether each of the Q, W, O, and P keys are pressed in
+         * this action.
+         */
+        public peek() : boolean[] {
+            return this.keysPressed;
+        }
+
+        /**
+         * Check whether this action is finished (i.e. internal step counter hit zero).
+         * 
+         * @return {boolean} Whether this action is finished.
+         */
+        public hasNext() : boolean {
+            return this.timestepsRemaining > 0;
+        }
+
+        /**
+         * Reset the number of timesteps in this action remaining. Do this before repeating an action.
+         */
+        public reset() {
+            if(!this.isExecutableCopy) throw Object.defineProperty(new Error("Tried to reset the base copy of an action.This is not inherently wrong, but it will do nothing. Could indicate logic flaws in the caller."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            this.timestepsRemaining = this.timestepsTotal;
+        }
+
+        /**
+         * Get the number of timesteps left to hold this key combination.
+         * 
+         * @return {number} The number of timesteps remaining in this action.
+         */
+        public getTimestepsRemaining() : number {
+            return this.timestepsRemaining;
+        }
+
+        /**
+         * Get the total duration of this action in timesteps.
+         * 
+         * @return {number} Total duration of this action (timesteps).
+         */
+        public getTimestepsTotal() : number {
+            return this.timestepsTotal;
+        }
+
+        /**
+         * Check if this action is equal to another in regards to keypresses and durations. Completely overrides default
+         * equals, so when doing ArrayList checks, this will be the only way to judge. Note that the actions do not need
+         * to have the same number of timesteps remaining to be judged as equal as long as their timestep totals and keys
+         * are the same.
+         * 
+         * @param {*} other An action to check whether it is equivalent to this action.
+         * @return {boolean} Whether the other action is equivalent to this one.
+         */
+        public equals(other : any) : boolean {
+            if(!(other != null && other instanceof <any>actions.Action)) {
+                return false;
+            }
+            let otherAction : Action = <Action>other;
+            let equal : boolean = true;
+            for(let i : number = 0; i < this.keysPressed.length; i++) {{
+                if(this.keysPressed[i] !== otherAction.peek()[i]) {
+                    equal = false;
+                    break;
+                }
+            };}
+            if(equal && this.timestepsTotal !== otherAction.getTimestepsTotal()) equal = false;
+            return equal;
+        }
+
+        /**
+         * Return a string with the current action keys, total time to hold, and time remaining. This method does not
+         * print, it just returns the string for the caller to use.
+         * 
+         * @return {string} String of information about this action.
+         */
+        public toString() : string {
+            let reportString : string = " Keys pressed: ";
+            reportString += this.keysPressed[0]?"Q":"";
+            reportString += this.keysPressed[1]?"W":"";
+            reportString += this.keysPressed[2]?"O":"";
+            reportString += this.keysPressed[3]?"P":"";
+            reportString += "; Timesteps elapsed/total: " + this.timestepsRemaining + "/" + this.timestepsTotal;
+            return reportString;
+        }
+
+        /**
+         * Get a copy of this action. This avoid multi-threading issues.
+         * 
+         * @return {actions.Action} A poll-able copy of this Action with all timesteps of the duration remaining.
+         */
+        public getCopy() : Action {
+            let copiedAction : Action = new Action(this.timestepsTotal, this.keysPressed);
+            copiedAction.isExecutableCopy = true;
+            return copiedAction;
+        }
+
+        /**
+         * Is this a mutable copy of the original action? Important if we plan to use this as a pollable queue. If the
+         * action is not mutable, then you must get a copy with {@link Action#getCopy()}.
+         * 
+         * @return {boolean} Returns whether this action can be polled. If false, then it is the original version of the action.
+         */
+        public isMutable() : boolean {
+            return this.isExecutableCopy;
+        }
+
+        /**
+         * Take a list of actions and combine adjacent actions which have the same keypresses.
+         * These mostly arise when doing control on a timestep-by-timestep basis. Only timestepsTotal are
+         * used. Timesteps remaining are not preserved. 0-duration actions are squashed away.
+         * An empty array input or one containing nothing but 0 length actions will produce an exception.
+         * 
+         * @param {actions.Action[]} inActions A list of actions which we wish to consolidate.
+         * @return {actions.Action[]} A new list of actions which is the consolidated version of the input action list.
+         * @throws IllegalArgumentException When trying to consolidate a list of actions containing nothing but 0-length
+         * actions.
+         */
+        public static consolidateActions(inActions : Array<Action>) : Array<Action> {
+            let outActions : Array<Action> = <any>([]);
+            if(/* size */(<number>inActions.length) === 1) {
+                if(/* get */inActions[0].getTimestepsTotal() === 0) {
+                    throw Object.defineProperty(new Error("Input action list had only one element, and this one element had 0 duration."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                }
+                /* add */(outActions.push(/* get */inActions[0])>0);
+                return outActions;
+            }
+            let consolidations : number = 0;
+            for(let i : number = 0; i < /* size */(<number>inActions.length) - 1; ) {{
+                let a1 : Action = /* get */inActions[i];
+                let a2 : Action = /* get */inActions[i + 1];
+                if(a1.getTimestepsTotal() === 0) {
+                    i++;
+                    if(/* size */(<number>inActions.length) - 1 === i && a2.getTimestepsTotal() !== 0) /* add */(outActions.push(a2)>0);
+                } else if(/* equals */((a1, a2) => { if(a1==null && a2==null) return true; if(a1==null || a2==null) return false; if(a1.length != a2.length) return false; for(let i = 0; i < a1.length; i++) { if(<any>a1[i] != <any>a2[i]) return false; } return true; })(a1.peek(), a2.peek())) {
+                    /* add */(outActions.push(new Action(a1.getTimestepsTotal() + a2.getTimestepsTotal(), a1.peek()))>0);
+                    consolidations++;
+                    i += 2;
+                } else {
+                    /* add */(outActions.push(a1)>0);
+                    i++;
+                    if(/* size */(<number>inActions.length) - 1 === i && a2.getTimestepsTotal() !== 0) /* add */(outActions.push(a2)>0);
+                }
+            };}
+            if(consolidations === 0) {
+                if(/* isEmpty */(outActions.length == 0)) {
+                    throw Object.defineProperty(new Error("Tried to consolidate a multi-element list of Actions. All had 0-duration, so consolidation does not make sense."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+                }
+                return outActions;
+            } else {
+                return Action.consolidateActions(outActions);
+            }
+        }
+    }
+    Action["__class"] = "actions.Action";
+    Action["__interfaces"] = ["java.io.Serializable"];
+
+
+}
+namespace actions {
+    /**
+     * All things related to storing and going through sequences of actions. {@link ActionQueue} itself acts like a
+     * {@link Queue} of {@link Action}, while actions act like queues of keypresses (commands). When
+     * calling {@link ActionQueue#pollCommand()}, this will return the next set of keypresses from the current action,
+     * while automatically advancing through actions when one's duration is complete.
+     * 
+     * @author Matt
+     * 
+     * @see Queue
+     * @see Action
+     * @see ActionSet
+     * @class
+     */
+    export class ActionQueue {
+        /**
+         * Actions are the delays between keypresses.
+         */
+        /*private*/ actionQueue : Array<actions.Action> = <any>([]);
+
+        /**
+         * All actions done or queued since the last reset. Unlike the queue, things aren't removed until reset.
+         */
+        /*private*/ actionListFull : Array<actions.Action> = <any>([]);
+
+        /**
+         * Integer action currently in progress. If the action is 20, this will be 20 even when 15 commands have been
+         * issued.
+         */
+        /*private*/ currentAction : actions.Action;
+
+        /**
+         * Is there anything at all queued up to execute? Includes both the currentAction and the actionQueue.
+         */
+        /*private*/ __isEmpty : boolean = true;
+
+        /**
+         * Number of commands polled from the ActionQueue during its life.
+         */
+        /*private*/ commandsPolled : number = 0;
+
+        public constructor() {
+            if(this.currentAction===undefined) this.currentAction = null;
+        }
+
+        /**
+         * See the action we are currently executing. Does not change the queue.
+         * 
+         * @return {actions.Action} Action which is currently being executed (i.e. timings and keypresses).
+         */
+        public peekThisAction() : actions.Action {
+            return this.currentAction;
+        }
+
+        /**
+         * See the next action we will execute. Does not change the queue.
+         * 
+         * @return {actions.Action} Next full action that will run (i.e. timings and keys). Returns null if no future actions remain.
+         */
+        public peekNextAction() : actions.Action {
+            if(this.isEmpty()) throw Object.defineProperty(new Error("No actions have been added to this queue. Cannot peek."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.IndexOutOfBoundsException','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            return /* peek */((s) => { return s[s.length-1]; })(this.actionQueue);
+        }
+
+        /**
+         * See the next keypresses.
+         * 
+         * @return {Array} Next QWOP keypresses as a boolean array. True is pressed, false is not pressed.
+         */
+        public peekCommand() : boolean[] {
+            if(this.currentAction == null) throw Object.defineProperty(new Error("No current action in the queue for us to peek at."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.IndexOutOfBoundsException','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            if(this.currentAction.getTimestepsRemaining() === 0) {
+                if(/* isEmpty */(this.actionQueue.length == 0)) {
+                    return null;
+                } else {
+                    return /* peek */((s) => { return s[s.length-1]; })(this.actionQueue).peek();
+                }
+            } else {
+                return this.currentAction.peek();
+            }
+        }
+
+        /**
+         * Adds a new action to the end of the queue. If this is the first action to be added, it is loaded up as the
+         * current action. All added actions are copied internally.
+         * 
+         * @param {actions.Action} action Action to add to the end of the queue as a copy. Does not influence current polling of the queue
+         * elements.
+         */
+        public addAction(action : actions.Action) {
+            if(action.getTimestepsTotal() === 0) return;
+            let localCopy : actions.Action = action.getCopy();
+            /* add */(this.actionQueue.push(localCopy)>0);
+            /* add */(this.actionListFull.push(localCopy)>0);
+            if(this.currentAction == null) {
+                this.currentAction = /* poll */(a => a.length==0?null:a.shift())(this.actionQueue);
+            }
+            this.__isEmpty = false;
+        }
+
+        public addSequence$actions_Action_A(actions : actions.Action[]) {
+            if(actions.length === 0) throw Object.defineProperty(new Error("Tried to add an empty array of actions to a queue."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+            for(let index121=0; index121 < actions.length; index121++) {
+                let action = actions[index121];
+                {
+                    this.addAction(action);
+                }
+            }
+        }
+
+        /**
+         * Add a sequence of actions. All added actions are copied.
+         * 
+         * @param {Array} actions Array of actions to add to the end of the queue. They are copied, and adding does not influence
+         * polling of the existing queue.
+         */
+        public addSequence(actions? : any) : any {
+            if(((actions != null && actions instanceof <any>Array && (actions.length==0 || actions[0] == null ||(actions[0] != null && actions[0] instanceof <any>actions.Action))) || actions === null)) {
+                return <any>this.addSequence$actions_Action_A(actions);
+            } else if(((actions != null && (actions instanceof Array)) || actions === null)) {
+                return <any>this.addSequence$java_util_List(actions);
+            } else throw new Error('invalid overload');
+        }
+
+        public addSequence$java_util_List(actions : Array<actions.Action>) {
+            if(/* size */(<number>actions.length) === 0) throw Object.defineProperty(new Error("Tried to add an empty array of actions to a queue."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
+            for(let index122=0; index122 < actions.length; index122++) {
+                let action = actions[index122];
+                {
+                    this.addAction(action);
+                }
+            }
+        }
+
+        /**
+         * Request the next QWOP keypress commands from the added sequence. Automatically advances between actions.
+         * 
+         * @return {Array} Get the next command (QWOP true/false array) on the queue.
+         */
+        public pollCommand() : boolean[] {
+            if(/* isEmpty */(this.actionQueue.length == 0) && !this.currentAction.hasNext()) {
+                throw Object.defineProperty(new Error("Tried to get a command off the queue when nothing is queued up."), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.IndexOutOfBoundsException','java.lang.Object','java.lang.RuntimeException','java.lang.Exception'] });
+            }
+            if(!this.currentAction.hasNext()) {
+                this.currentAction.reset();
+                this.currentAction = /* poll */(a => a.length==0?null:a.shift())(this.actionQueue);
+                /* requireNonNull */if(this.currentAction==null){throw new Error('cannot be null')};
+            }
+            let nextCommand : boolean[] = this.currentAction.poll();
+            if(!this.currentAction.hasNext() && /* isEmpty */(this.actionQueue.length == 0)) {
+                this.__isEmpty = true;
+            }
+            this.commandsPolled++;
+            return nextCommand;
+        }
+
+        /**
+         * Remove everything from the queues and reset the sequence.
+         */
+        public clearAll() {
+            /* clear */(this.actionQueue.length = 0);
+            /* clear */(this.actionListFull.length = 0);
+            if(this.currentAction != null) this.currentAction.reset();
+            this.currentAction = null;
+            this.__isEmpty = true;
+        }
+
+        /**
+         * Check if the queue has anything in it.
+         * 
+         * @return {boolean} Whether this queue has more commands left to poll.
+         */
+        public isEmpty() : boolean {
+            return this.__isEmpty;
+        }
+
+        /**
+         * Get all the actions in this queue.
+         * 
+         * @return {Array} All actions in this queue, including ones which have already been executed.
+         */
+        public getActionsInCurrentRun() : actions.Action[] {
+            return /* toArray */this.actionListFull.slice(0);
+        }
+
+        /**
+         * Index of the current action. 0 is the first {@link Action}.
+         * 
+         * @return {number} Index of the current action.
+         */
+        public getCurrentActionIdx() : number {
+            let currIdx : number = /* size */(<number>this.actionListFull.length) - /* size */(<number>this.actionQueue.length) - 1;
+            return currIdx;
+        }
+
+        /**
+         * Resets all progress on the queue making it ready to execute the same actions again. Note that to actually
+         * remove actions, you should use {@link ActionQueue#clearAll()}.
+         */
+        public resetQueue() {
+            let actions : actions.Action[] = this.getActionsInCurrentRun();
+            this.clearAll();
+            this.addSequence$actions_Action_A(actions);
+        }
+
+        /**
+         * Get a copy of this ActionQueue, with none of the actions performed yet.
+         * 
+         * @return {actions.ActionQueue} An ActionQueue with all the same actions, but no progress in them done yet.
+         */
+        public getCopyOfUnexecutedQueue() : ActionQueue {
+            let actionQueueCopy : ActionQueue = new ActionQueue();
+            actionQueueCopy.addSequence$actions_Action_A(this.getActionsInCurrentRun());
+            return actionQueueCopy;
+        }
+
+        /**
+         * Get a copy of this ActionQueue, with the same actions, and the same progress made on those actions.
+         * 
+         * @return {actions.ActionQueue} An ActionQueue which should behave identically to the original.
+         */
+        public getCopyOfQueueAtExecutionPoint() : ActionQueue {
+            let actionQueueCopy : ActionQueue = this.getCopyOfUnexecutedQueue();
+            for(let i : number = 0; i < this.commandsPolled; i++) {{
+                actionQueueCopy.pollCommand();
+            };}
+            return actionQueueCopy;
+        }
+
+        /**
+         * Gives the total duration of this action queue in timesteps. This does not depend on the number of timesteps
+         * already executed on this queue.
+         * 
+         * @return {number} Total duration of this queue in timesteps.
+         */
+        public getTotalQueueLengthTimesteps() : number {
+            let totalTS : number = 0;
+            for(let index123=0; index123 < this.actionListFull.length; index123++) {
+                let a = this.actionListFull[index123];
+                {
+                    totalTS += a.getTimestepsTotal();
+                }
+            }
+            return totalTS;
+        }
+    }
+    ActionQueue["__class"] = "actions.ActionQueue";
+
+}
 namespace org.jbox2d.pooling {
     export class TLXForm {
         initialValue() : org.jbox2d.common.XForm {
@@ -2134,36 +2631,36 @@ namespace org.jbox2d.util.blob {
         currentDamping : number = 0.9;
 
         updateSprings() {
-            for(let index121=0; index121 < this.connections.length; index121++) {
-                let iiff = this.connections[index121];
+            for(let index124=0; index124 < this.connections.length; index124++) {
+                let iiff = this.connections[index124];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index122=0; index122 < this.connectionsR.length; index122++) {
-                let iiff = this.connectionsR[index122];
+            for(let index125=0; index125 < this.connectionsR.length; index125++) {
+                let iiff = this.connectionsR[index125];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index123=0; index123 < this.connectionsDR.length; index123++) {
-                let iiff = this.connectionsDR[index123];
+            for(let index126=0; index126 < this.connectionsDR.length; index126++) {
+                let iiff = this.connectionsDR[index126];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index124=0; index124 < this.connectionsD.length; index124++) {
-                let iiff = this.connectionsD[index124];
+            for(let index127=0; index127 < this.connectionsD.length; index127++) {
+                let iiff = this.connectionsD[index127];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
                 }
             }
-            for(let index125=0; index125 < this.connectionsUR.length; index125++) {
-                let iiff = this.connectionsUR[index125];
+            for(let index128=0; index128 < this.connectionsUR.length; index128++) {
+                let iiff = this.connectionsUR[index128];
                 {
                     iiff.c = this.currentFrequency;
                     iiff.d = this.currentDamping;
@@ -5129,8 +5626,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index126=0; index126 < bodies.length; index126++) {
-                        let b = bodies[index126];
+                    for(let index129=0; index129 < bodies.length; index129++) {
+                        let b = bodies[index129];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.bodies, b);
                             if(w == null) {
@@ -5149,8 +5646,8 @@ namespace org.jbox2d.dynamics {
                 if(this.world===undefined) this.world = null;
                 (() => {
                     let w : org.jbox2d.dynamics.World = null;
-                    for(let index127=0; index127 < groups.length; index127++) {
-                        let bg = groups[index127];
+                    for(let index130=0; index130 < groups.length; index130++) {
+                        let bg = groups[index130];
                         {
                             /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(this.children, bg);
                             if(w == null) {
@@ -5190,8 +5687,8 @@ namespace org.jbox2d.dynamics {
         public getBodiesDeep() : Array<org.jbox2d.dynamics.Body> {
             let res : Array<org.jbox2d.dynamics.Body> = <any>([]);
             /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, this.bodies);
-            for(let index128=0; index128 < this.children.length; index128++) {
-                let bg = this.children[index128];
+            for(let index131=0; index131 < this.children.length; index131++) {
+                let bg = this.children[index131];
                 {
                     /* addAll */((l1, l2) => l1.push.apply(l1, l2))(res, bg.getBodiesDeep());
                 }
@@ -9801,8 +10298,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index129=0; index129 < connected.length; index129++) {
-                let b = connected[index129];
+            for(let index132=0; index132 < connected.length; index132++) {
+                let b = connected[index132];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -9827,8 +10324,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getConnectedDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let connected : Array<Body> = this.getConnectedBodies();
-            for(let index130=0; index130 < connected.length; index130++) {
-                let b = connected[index130];
+            for(let index133=0; index133 < connected.length; index133++) {
+                let b = connected[index133];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -9853,8 +10350,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index131=0; index131 < touching.length; index131++) {
-                let b = touching[index131];
+            for(let index134=0; index134 < touching.length; index134++) {
+                let b = touching[index134];
                 {
                     if(b === parent || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -9877,8 +10374,8 @@ namespace org.jbox2d.dynamics {
 
         /*private*/ getTouchingDynamicBodyIsland_impl(parent : Body, parentResult : Array<Body>) : Array<Body> {
             let touching : Array<Body> = this.getBodiesInContact();
-            for(let index132=0; index132 < touching.length; index132++) {
-                let b = touching[index132];
+            for(let index135=0; index135 < touching.length; index135++) {
+                let b = touching[index135];
                 {
                     if(b === parent || !b.isDynamic() || /* contains */(parentResult.indexOf(<any>(b)) >= 0)) continue;
                     /* add */((s, e) => { if(s.indexOf(e)==-1) { s.push(e); return true; } else { return false; } })(parentResult, b);
@@ -19886,8 +20383,8 @@ namespace org.jbox2d.dynamics {
          * @private
          */
         /*private*/ postStep(dt : number, iterations : number) {
-            for(let index133=0; index133 < this.postStepList.length; index133++) {
-                let s = this.postStepList[index133];
+            for(let index136=0; index136 < this.postStepList.length; index136++) {
+                let s = this.postStepList[index136];
                 {
                     s.step(dt, iterations);
                 }
@@ -20676,31 +21173,31 @@ namespace game {
          */
         static worldAABB : org.jbox2d.collision.AABB; public static worldAABB_$LI$() : org.jbox2d.collision.AABB { if(GameSingleThread.worldAABB == null) GameSingleThread.worldAABB = new org.jbox2d.collision.AABB(new org.jbox2d.common.Vec2(game.GameConstants.aabbMinX, game.GameConstants.aabbMinY), new org.jbox2d.common.Vec2(game.GameConstants.aabbMaxX, game.GameConstants.aabbMaxY)); return GameSingleThread.worldAABB; };
 
-        /*private*/ rFootBody : org.jbox2d.dynamics.Body;
+        rFootBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ lFootBody : org.jbox2d.dynamics.Body;
+        lFootBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ rCalfBody : org.jbox2d.dynamics.Body;
+        rCalfBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ lCalfBody : org.jbox2d.dynamics.Body;
+        lCalfBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ rThighBody : org.jbox2d.dynamics.Body;
+        rThighBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ lThighBody : org.jbox2d.dynamics.Body;
+        lThighBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ torsoBody : org.jbox2d.dynamics.Body;
+        torsoBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ rUArmBody : org.jbox2d.dynamics.Body;
+        rUArmBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ lUArmBody : org.jbox2d.dynamics.Body;
+        lUArmBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ rLArmBody : org.jbox2d.dynamics.Body;
+        rLArmBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ lLArmBody : org.jbox2d.dynamics.Body;
+        lLArmBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ headBody : org.jbox2d.dynamics.Body;
+        headBody : org.jbox2d.dynamics.Body;
 
-        /*private*/ trackBody : org.jbox2d.dynamics.Body;
+        trackBody : org.jbox2d.dynamics.Body;
 
         public rHipJDef : org.jbox2d.dynamics.joints.RevoluteJointDef;
 
@@ -20890,6 +21387,8 @@ namespace game {
          */
         static initState : game.State; public static initState_$LI$() : game.State { if(GameSingleThread.initState == null) GameSingleThread.initState = new GameSingleThread().getCurrentState(); return GameSingleThread.initState; };
 
+        static noFeet : boolean = false;
+
         public constructor() {
             if(this.m_world===undefined) this.m_world = null;
             if(this.rFootBody===undefined) this.rFootBody = null;
@@ -21065,10 +21564,12 @@ namespace game {
             this.m_world.setContinuousPhysics(true);
             this.trackBody = this.m_world.createBody(GameSingleThread.trackDef_$LI$());
             this.trackBody.createShape(GameSingleThread.trackShape_$LI$());
-            this.rFootBody = this.getWorld().createBody(GameSingleThread.rFootDef_$LI$());
-            this.lFootBody = this.getWorld().createBody(GameSingleThread.lFootDef_$LI$());
-            this.rFootBody.createShape(GameSingleThread.rFootShape_$LI$());
-            this.lFootBody.createShape(GameSingleThread.lFootShape_$LI$());
+            if(!GameSingleThread.noFeet) {
+                this.rFootBody = this.getWorld().createBody(GameSingleThread.rFootDef_$LI$());
+                this.lFootBody = this.getWorld().createBody(GameSingleThread.lFootDef_$LI$());
+                this.rFootBody.createShape(GameSingleThread.rFootShape_$LI$());
+                this.lFootBody.createShape(GameSingleThread.lFootShape_$LI$());
+            }
             this.rCalfBody = this.getWorld().createBody(GameSingleThread.rCalfDef_$LI$());
             this.lCalfBody = this.getWorld().createBody(GameSingleThread.lCalfDef_$LI$());
             this.rCalfBody.createShape(GameSingleThread.rCalfShape_$LI$());
@@ -21089,33 +21590,35 @@ namespace game {
             this.torsoBody.createShape(GameSingleThread.torsoShape_$LI$());
             this.headBody = this.getWorld().createBody(GameSingleThread.headDef_$LI$());
             this.headBody.createShape(GameSingleThread.headShape_$LI$());
-            this.rAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
-            this.rAnkleJDef.initialize(this.rFootBody, this.rCalfBody, GameSingleThread.rAnklePos_$LI$());
-            this.rAnkleJDef.enableLimit = true;
-            this.rAnkleJDef.upperAngle = 0.5;
-            this.rAnkleJDef.lowerAngle = -0.5;
-            this.rAnkleJDef.enableMotor = false;
-            this.rAnkleJDef.maxMotorTorque = 2000.0;
-            this.rAnkleJDef.motorSpeed = 0.0;
-            this.rAnkleJDef.collideConnected = false;
-            this.rAnkleJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.rAnkleJDef);
-            this.lAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
-            this.lAnkleJDef.initialize(this.lFootBody, this.lCalfBody, GameSingleThread.lAnklePos_$LI$());
-            this.lAnkleJDef.enableLimit = true;
-            this.lAnkleJDef.upperAngle = 0.5;
-            this.lAnkleJDef.lowerAngle = -0.5;
-            this.lAnkleJDef.enableMotor = false;
-            this.lAnkleJDef.maxMotorTorque = 2000;
-            this.lAnkleJDef.motorSpeed = 0.0;
-            this.lAnkleJDef.collideConnected = false;
-            this.lAnkleJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.lAnkleJDef);
+            if(!GameSingleThread.noFeet) {
+                this.rAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
+                this.rAnkleJDef.initialize(this.rFootBody, this.rCalfBody, GameSingleThread.rAnklePos_$LI$());
+                this.rAnkleJDef.enableLimit = true;
+                this.rAnkleJDef.upperAngle = 0.5;
+                this.rAnkleJDef.lowerAngle = -0.5;
+                this.rAnkleJDef.enableMotor = false;
+                this.rAnkleJDef.maxMotorTorque = 2000.0;
+                this.rAnkleJDef.motorSpeed = 0.0;
+                this.rAnkleJDef.collideConnected = false;
+                this.rAnkleJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.rAnkleJDef);
+                this.lAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
+                this.lAnkleJDef.initialize(this.lFootBody, this.lCalfBody, GameSingleThread.lAnklePos_$LI$());
+                this.lAnkleJDef.enableLimit = true;
+                this.lAnkleJDef.upperAngle = 0.5;
+                this.lAnkleJDef.lowerAngle = -0.5;
+                this.lAnkleJDef.enableMotor = false;
+                this.lAnkleJDef.maxMotorTorque = 2000.0;
+                this.lAnkleJDef.motorSpeed = 0.0;
+                this.lAnkleJDef.collideConnected = false;
+                this.lAnkleJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.lAnkleJDef);
+            }
             this.rKneeJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
             this.rKneeJDef.initialize(this.rCalfBody, this.rThighBody, GameSingleThread.rKneePos_$LI$());
             this.rKneeJDef.enableLimit = true;
             this.rKneeJDef.upperAngle = 0.3;
             this.rKneeJDef.lowerAngle = -1.3;
             this.rKneeJDef.enableMotor = true;
-            this.rKneeJDef.maxMotorTorque = 3000;
+            this.rKneeJDef.maxMotorTorque = 3000.0;
             this.rKneeJDef.motorSpeed = 0.0;
             this.rKneeJDef.collideConnected = false;
             this.rKneeJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.rKneeJDef);
@@ -21125,7 +21628,7 @@ namespace game {
             this.lKneeJDef.upperAngle = 0.0;
             this.lKneeJDef.lowerAngle = -1.6;
             this.lKneeJDef.enableMotor = true;
-            this.lKneeJDef.maxMotorTorque = 3000;
+            this.lKneeJDef.maxMotorTorque = 3000.0;
             this.lKneeJDef.motorSpeed = 0.0;
             this.lKneeJDef.collideConnected = false;
             this.lKneeJ = <org.jbox2d.dynamics.joints.RevoluteJoint>this.getWorld().createJoint(this.lKneeJDef);
@@ -21218,6 +21721,22 @@ namespace game {
             }
         }
 
+        setMaxMotorTorque(torqueLimitMultiplier : number) {
+            if(!GameSingleThread.noFeet) {
+                this.rAnkleJ.setMaxMotorTorque((<any>Math).fround(2000.0 * torqueLimitMultiplier));
+                this.lAnkleJ.setMaxMotorTorque((<any>Math).fround(2000.0 * torqueLimitMultiplier));
+            }
+            this.rKneeJ.setMaxMotorTorque((<any>Math).fround(3000.0 * torqueLimitMultiplier));
+            this.lKneeJ.setMaxMotorTorque((<any>Math).fround(3000.0 * torqueLimitMultiplier));
+            this.rHipJ.setMaxMotorTorque((<any>Math).fround(6000.0 * torqueLimitMultiplier));
+            this.lHipJ.setMaxMotorTorque((<any>Math).fround(6000.0 * torqueLimitMultiplier));
+            this.neckJ.setMaxMotorTorque((<any>Math).fround(1000.0 * torqueLimitMultiplier));
+            this.rShoulderJ.setMaxMotorTorque((<any>Math).fround(1000.0 * torqueLimitMultiplier));
+            this.lShoulderJ.setMaxMotorTorque((<any>Math).fround(1000.0 * torqueLimitMultiplier));
+            this.rElbowJ.setMaxMotorTorque(0.0);
+            this.lElbowJ.setMaxMotorTorque(0.0);
+        }
+
         public stepGame$boolean_A(command : boolean[]) {
             if(command.length !== 4) {
                 throw Object.defineProperty(new Error("Command is not the correct length. Expected 4, got: " + command.length), '__classes', { configurable: true, value: ['java.lang.Throwable','java.lang.Object','java.lang.RuntimeException','java.lang.IllegalArgumentException','java.lang.Exception'] });
@@ -21252,7 +21771,7 @@ namespace game {
                 this.lShoulderJ.m_motorSpeed = (0.0);
                 this.rShoulderJ.m_motorSpeed = (0.0);
             }
-            if(q || w) {
+            if(q || w && !GameSingleThread.noFeet) {
                 let RAnkleCur : org.jbox2d.common.Vec2 = this.rAnkleJ.getAnchor1();
                 let LAnkleCur : org.jbox2d.common.Vec2 = this.lAnkleJ.getAnchor1();
                 let RHipCur : org.jbox2d.common.Vec2 = this.rHipJ.getAnchor1();
@@ -21329,7 +21848,7 @@ namespace game {
          * @return {game.State}
          */
         public getCurrentState() : game.State {
-            return new game.State(this.getCurrentBodyState(this.torsoBody), this.getCurrentBodyState(this.headBody), this.getCurrentBodyState(this.rThighBody), this.getCurrentBodyState(this.lThighBody), this.getCurrentBodyState(this.rCalfBody), this.getCurrentBodyState(this.lCalfBody), this.getCurrentBodyState(this.rFootBody), this.getCurrentBodyState(this.lFootBody), this.getCurrentBodyState(this.rUArmBody), this.getCurrentBodyState(this.lUArmBody), this.getCurrentBodyState(this.rLArmBody), this.getCurrentBodyState(this.lLArmBody), this.getFailureStatus());
+            return new game.State(this.getCurrentBodyState(this.torsoBody), this.getCurrentBodyState(this.headBody), this.getCurrentBodyState(this.rThighBody), this.getCurrentBodyState(this.lThighBody), this.getCurrentBodyState(this.rCalfBody), this.getCurrentBodyState(this.lCalfBody), GameSingleThread.noFeet?new game.StateVariable(0, 0, 0, 0, 0, 0):this.getCurrentBodyState(this.rFootBody), GameSingleThread.noFeet?new game.StateVariable(0, 0, 0, 0, 0, 0):this.getCurrentBodyState(this.lFootBody), this.getCurrentBodyState(this.rUArmBody), this.getCurrentBodyState(this.lUArmBody), this.getCurrentBodyState(this.rLArmBody), this.getCurrentBodyState(this.lLArmBody), this.getFailureStatus());
         }
 
         /**
@@ -21367,6 +21886,24 @@ namespace game {
         }
 
         /**
+         * Change world gravity.
+         * 
+         * @param {number} xGrav x component of gravity.
+         * @param {number} yGrav y component of gravity -- positive is down.
+         */
+        public setGravity(xGrav : number, yGrav : number) {
+            this.getWorld().setGravity(new org.jbox2d.common.Vec2(xGrav, yGrav));
+        }
+
+        public setMaxTorqueMultiplier(multiplier : number) {
+            this.setMaxMotorTorque(multiplier);
+        }
+
+        public setPointFeet(usePointFeet : boolean) {
+            GameSingleThread.noFeet = usePointFeet;
+        }
+
+        /**
          * Get vertices for debug drawing. Each array in the list will have:
          * 8 floats for rectangles (x1,y1,x2,y2,...).
          * 3 floats for circles (x,y,radius).
@@ -21379,7 +21916,12 @@ namespace game {
             let vertHolder : GameSingleThread.VertHolder = new GameSingleThread.VertHolder(this);
             vertHolder.groundHeight = org.jbox2d.common.XForm.mul(this.trackBody.getXForm(), /* get */GameSingleThread.trackShape_$LI$().vertices[0]).y;
             vertHolder.torsoX = this.torsoBody.getPosition().x;
-            let bodies : org.jbox2d.dynamics.Body[] = [this.rFootBody, this.lFootBody, this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            let bodies : org.jbox2d.dynamics.Body[];
+            if(!GameSingleThread.noFeet) {
+                bodies = [this.rFootBody, this.lFootBody, this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            } else {
+                bodies = [this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            }
             for(let i : number = 0; i < bodies.length; i++) {{
                 let xf : org.jbox2d.common.XForm = bodies[i].getXForm();
                 let shape : org.jbox2d.collision.shapes.PolygonShape = <org.jbox2d.collision.shapes.PolygonShape>bodies[i].getShapeList();
@@ -21455,9 +21997,9 @@ namespace game {
                     this.__parent.isFailed = true;
                 } else if(/* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.lThighBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.lThighBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.rThighBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.rThighBody))) {
                     this.__parent.isFailed = true;
-                } else if(/* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.rFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.rFootBody))) {
+                } else if(!game.GameSingleThread.noFeet && /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.rFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.rFootBody))) {
                     this.rFootDown = true;
-                } else if(/* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.lFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.lFootBody))) {
+                } else if(!game.GameSingleThread.noFeet && /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.lFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.lFootBody))) {
                     this.lFootDown = true;
                 }
             }
@@ -21476,9 +22018,9 @@ namespace game {
             public remove(point : org.jbox2d.dynamics.contacts.ContactPoint) {
                 let fixtureA : org.jbox2d.collision.shapes.Shape = point.shape1;
                 let fixtureB : org.jbox2d.collision.shapes.Shape = point.shape2;
-                if(/* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.rFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.rFootBody))) {
+                if(!game.GameSingleThread.noFeet && /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.rFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.rFootBody))) {
                     this.rFootDown = false;
-                } else if(/* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.lFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.lFootBody))) {
+                } else if(!game.GameSingleThread.noFeet && /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureA.m_body,this.__parent.lFootBody)) || /* equals */(<any>((o1: any, o2: any) => { if(o1 && o1.equals) { return o1.equals(o2); } else { return o1 === o2; } })(fixtureB.m_body,this.__parent.lFootBody))) {
                     this.lFootDown = false;
                 }
             }

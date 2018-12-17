@@ -1,4 +1,505 @@
 /* Generated from Java with JSweet 2.2.0-SNAPSHOT - http://www.jsweet.org */
+var actions;
+(function (actions) {
+    /**
+     * Create an action containing the time to hold and the key combination.
+     *
+     * @param {number} totalTimestepsToHold Number of timesteps to hold the keys associated with this Action.
+     * @param {boolean} Q                    Whether the Q key is pressed during this action.
+     * @param {boolean} W                    Whether the W key is pressed during this action.
+     * @param {boolean} O                    Whether the O key is pressed during this action.
+     * @param {boolean} P                    Whether the P key is pressed during this action.
+     * @class
+     * @author Matt
+     */
+    class Action {
+        constructor(totalTimestepsToHold, Q, W, O, P) {
+            /**
+             * Is this the immutable original or a derived, mutable copy. A little bit hacky, but a way of avoiding threading
+             * issues without major modifications.
+             */
+            /*private*/ this.isExecutableCopy = false;
+            if (((typeof totalTimestepsToHold === 'number') || totalTimestepsToHold === null) && ((typeof Q === 'boolean') || Q === null) && ((typeof W === 'boolean') || W === null) && ((typeof O === 'boolean') || O === null) && ((typeof P === 'boolean') || P === null)) {
+                let __args = arguments;
+                {
+                    let __args = arguments;
+                    let keysPressed = [Q, W, O, P];
+                    if (this.timestepsTotal === undefined)
+                        this.timestepsTotal = 0;
+                    if (this.timestepsRemaining === undefined)
+                        this.timestepsRemaining = 0;
+                    if (this.keysPressed === undefined)
+                        this.keysPressed = null;
+                    this.isExecutableCopy = false;
+                    if (this.timestepsTotal === undefined)
+                        this.timestepsTotal = 0;
+                    if (this.timestepsRemaining === undefined)
+                        this.timestepsRemaining = 0;
+                    if (this.keysPressed === undefined)
+                        this.keysPressed = null;
+                    (() => {
+                        if (keysPressed.length !== 4)
+                            throw Object.defineProperty(new Error("A QWOP action should have booleans for exactly 4 keys. Tried to create one with a boolean array of size: " + keysPressed.length), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                        if (totalTimestepsToHold < 0)
+                            throw Object.defineProperty(new Error("New QWOP Action must have non-negative duration. Given: " + totalTimestepsToHold), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                        this.timestepsTotal = totalTimestepsToHold;
+                        this.keysPressed = keysPressed;
+                        this.timestepsRemaining = this.timestepsTotal;
+                    })();
+                }
+            }
+            else if (((typeof totalTimestepsToHold === 'number') || totalTimestepsToHold === null) && ((Q != null && Q instanceof Array && (Q.length == 0 || Q[0] == null || (typeof Q[0] === 'boolean'))) || Q === null) && W === undefined && O === undefined && P === undefined) {
+                let __args = arguments;
+                let keysPressed = __args[1];
+                if (this.timestepsTotal === undefined)
+                    this.timestepsTotal = 0;
+                if (this.timestepsRemaining === undefined)
+                    this.timestepsRemaining = 0;
+                if (this.keysPressed === undefined)
+                    this.keysPressed = null;
+                this.isExecutableCopy = false;
+                if (this.timestepsTotal === undefined)
+                    this.timestepsTotal = 0;
+                if (this.timestepsRemaining === undefined)
+                    this.timestepsRemaining = 0;
+                if (this.keysPressed === undefined)
+                    this.keysPressed = null;
+                (() => {
+                    if (keysPressed.length !== 4)
+                        throw Object.defineProperty(new Error("A QWOP action should have booleans for exactly 4 keys. Tried to create one with a boolean array of size: " + keysPressed.length), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                    if (totalTimestepsToHold < 0)
+                        throw Object.defineProperty(new Error("New QWOP Action must have non-negative duration. Given: " + totalTimestepsToHold), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                    this.timestepsTotal = totalTimestepsToHold;
+                    this.keysPressed = keysPressed;
+                    this.timestepsRemaining = this.timestepsTotal;
+                })();
+            }
+            else
+                throw new Error('invalid overload');
+        }
+        /**
+         * Return the keys for this action and decrement the timestepsRemaining.
+         *
+         * @return {Array} A 4-element array containing true/false for whether each of the Q, W, O, and P keys are pressed.
+         */
+        poll() {
+            if (!this.isExecutableCopy)
+                throw Object.defineProperty(new Error("Trying to execute the base version of the Action. Due to multi-threading, this REALLY screws with the counters in the action. Call getCopy for the version you should use."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            if (this.timestepsRemaining <= 0)
+                throw Object.defineProperty(new Error("Tried to poll an action which was already completed. Call hasNext() to check before calling poll()."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.IndexOutOfBoundsException', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            this.timestepsRemaining--;
+            return this.keysPressed;
+        }
+        /**
+         * Return the keys pressed in this action without changing the number of timesteps remaining in this action.
+         *
+         * @return {Array} A 4-element array containing true/false for whether each of the Q, W, O, and P keys are pressed in
+         * this action.
+         */
+        peek() {
+            return this.keysPressed;
+        }
+        /**
+         * Check whether this action is finished (i.e. internal step counter hit zero).
+         *
+         * @return {boolean} Whether this action is finished.
+         */
+        hasNext() {
+            return this.timestepsRemaining > 0;
+        }
+        /**
+         * Reset the number of timesteps in this action remaining. Do this before repeating an action.
+         */
+        reset() {
+            if (!this.isExecutableCopy)
+                throw Object.defineProperty(new Error("Tried to reset the base copy of an action.This is not inherently wrong, but it will do nothing. Could indicate logic flaws in the caller."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            this.timestepsRemaining = this.timestepsTotal;
+        }
+        /**
+         * Get the number of timesteps left to hold this key combination.
+         *
+         * @return {number} The number of timesteps remaining in this action.
+         */
+        getTimestepsRemaining() {
+            return this.timestepsRemaining;
+        }
+        /**
+         * Get the total duration of this action in timesteps.
+         *
+         * @return {number} Total duration of this action (timesteps).
+         */
+        getTimestepsTotal() {
+            return this.timestepsTotal;
+        }
+        /**
+         * Check if this action is equal to another in regards to keypresses and durations. Completely overrides default
+         * equals, so when doing ArrayList checks, this will be the only way to judge. Note that the actions do not need
+         * to have the same number of timesteps remaining to be judged as equal as long as their timestep totals and keys
+         * are the same.
+         *
+         * @param {*} other An action to check whether it is equivalent to this action.
+         * @return {boolean} Whether the other action is equivalent to this one.
+         */
+        equals(other) {
+            if (!(other != null && other instanceof actions.Action)) {
+                return false;
+            }
+            let otherAction = other;
+            let equal = true;
+            for (let i = 0; i < this.keysPressed.length; i++) {
+                {
+                    if (this.keysPressed[i] !== otherAction.peek()[i]) {
+                        equal = false;
+                        break;
+                    }
+                }
+                ;
+            }
+            if (equal && this.timestepsTotal !== otherAction.getTimestepsTotal())
+                equal = false;
+            return equal;
+        }
+        /**
+         * Return a string with the current action keys, total time to hold, and time remaining. This method does not
+         * print, it just returns the string for the caller to use.
+         *
+         * @return {string} String of information about this action.
+         */
+        toString() {
+            let reportString = " Keys pressed: ";
+            reportString += this.keysPressed[0] ? "Q" : "";
+            reportString += this.keysPressed[1] ? "W" : "";
+            reportString += this.keysPressed[2] ? "O" : "";
+            reportString += this.keysPressed[3] ? "P" : "";
+            reportString += "; Timesteps elapsed/total: " + this.timestepsRemaining + "/" + this.timestepsTotal;
+            return reportString;
+        }
+        /**
+         * Get a copy of this action. This avoid multi-threading issues.
+         *
+         * @return {actions.Action} A poll-able copy of this Action with all timesteps of the duration remaining.
+         */
+        getCopy() {
+            let copiedAction = new Action(this.timestepsTotal, this.keysPressed);
+            copiedAction.isExecutableCopy = true;
+            return copiedAction;
+        }
+        /**
+         * Is this a mutable copy of the original action? Important if we plan to use this as a pollable queue. If the
+         * action is not mutable, then you must get a copy with {@link Action#getCopy()}.
+         *
+         * @return {boolean} Returns whether this action can be polled. If false, then it is the original version of the action.
+         */
+        isMutable() {
+            return this.isExecutableCopy;
+        }
+        /**
+         * Take a list of actions and combine adjacent actions which have the same keypresses.
+         * These mostly arise when doing control on a timestep-by-timestep basis. Only timestepsTotal are
+         * used. Timesteps remaining are not preserved. 0-duration actions are squashed away.
+         * An empty array input or one containing nothing but 0 length actions will produce an exception.
+         *
+         * @param {actions.Action[]} inActions A list of actions which we wish to consolidate.
+         * @return {actions.Action[]} A new list of actions which is the consolidated version of the input action list.
+         * @throws IllegalArgumentException When trying to consolidate a list of actions containing nothing but 0-length
+         * actions.
+         */
+        static consolidateActions(inActions) {
+            let outActions = ([]);
+            if (inActions.length === 1) {
+                if (inActions[0].getTimestepsTotal() === 0) {
+                    throw Object.defineProperty(new Error("Input action list had only one element, and this one element had 0 duration."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                }
+                /* add */ (outActions.push(/* get */ inActions[0]) > 0);
+                return outActions;
+            }
+            let consolidations = 0;
+            for (let i = 0; i < inActions.length - 1;) {
+                {
+                    let a1 = inActions[i];
+                    let a2 = inActions[i + 1];
+                    if (a1.getTimestepsTotal() === 0) {
+                        i++;
+                        if (inActions.length - 1 === i && a2.getTimestepsTotal() !== 0)
+                            (outActions.push(a2) > 0);
+                    }
+                    else if (((a1, a2) => { if (a1 == null && a2 == null)
+                        return true; if (a1 == null || a2 == null)
+                        return false; if (a1.length != a2.length)
+                        return false; for (let i = 0; i < a1.length; i++) {
+                        if (a1[i] != a2[i])
+                            return false;
+                    } return true; })(a1.peek(), a2.peek())) {
+                        /* add */ (outActions.push(new Action(a1.getTimestepsTotal() + a2.getTimestepsTotal(), a1.peek())) > 0);
+                        consolidations++;
+                        i += 2;
+                    }
+                    else {
+                        /* add */ (outActions.push(a1) > 0);
+                        i++;
+                        if (inActions.length - 1 === i && a2.getTimestepsTotal() !== 0)
+                            (outActions.push(a2) > 0);
+                    }
+                }
+                ;
+            }
+            if (consolidations === 0) {
+                if ((outActions.length == 0)) {
+                    throw Object.defineProperty(new Error("Tried to consolidate a multi-element list of Actions. All had 0-duration, so consolidation does not make sense."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+                }
+                return outActions;
+            }
+            else {
+                return Action.consolidateActions(outActions);
+            }
+        }
+    }
+    Action.serialVersionUID = 2;
+    actions.Action = Action;
+    Action["__class"] = "actions.Action";
+    Action["__interfaces"] = ["java.io.Serializable"];
+})(actions || (actions = {}));
+(function (actions_1) {
+    /**
+     * All things related to storing and going through sequences of actions. {@link ActionQueue} itself acts like a
+     * {@link Queue} of {@link Action}, while actions act like queues of keypresses (commands). When
+     * calling {@link ActionQueue#pollCommand()}, this will return the next set of keypresses from the current action,
+     * while automatically advancing through actions when one's duration is complete.
+     *
+     * @author Matt
+     *
+     * @see Queue
+     * @see Action
+     * @see ActionSet
+     * @class
+     */
+    class ActionQueue {
+        constructor() {
+            /**
+             * Actions are the delays between keypresses.
+             */
+            /*private*/ this.actionQueue = ([]);
+            /**
+             * All actions done or queued since the last reset. Unlike the queue, things aren't removed until reset.
+             */
+            /*private*/ this.actionListFull = ([]);
+            /**
+             * Is there anything at all queued up to execute? Includes both the currentAction and the actionQueue.
+             */
+            /*private*/ this.__isEmpty = true;
+            /**
+             * Number of commands polled from the ActionQueue during its life.
+             */
+            /*private*/ this.commandsPolled = 0;
+            if (this.currentAction === undefined)
+                this.currentAction = null;
+        }
+        /**
+         * See the action we are currently executing. Does not change the queue.
+         *
+         * @return {actions.Action} Action which is currently being executed (i.e. timings and keypresses).
+         */
+        peekThisAction() {
+            return this.currentAction;
+        }
+        /**
+         * See the next action we will execute. Does not change the queue.
+         *
+         * @return {actions.Action} Next full action that will run (i.e. timings and keys). Returns null if no future actions remain.
+         */
+        peekNextAction() {
+            if (this.isEmpty())
+                throw Object.defineProperty(new Error("No actions have been added to this queue. Cannot peek."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.IndexOutOfBoundsException', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            return ((s) => { return s[s.length - 1]; })(this.actionQueue);
+        }
+        /**
+         * See the next keypresses.
+         *
+         * @return {Array} Next QWOP keypresses as a boolean array. True is pressed, false is not pressed.
+         */
+        peekCommand() {
+            if (this.currentAction == null)
+                throw Object.defineProperty(new Error("No current action in the queue for us to peek at."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.IndexOutOfBoundsException', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            if (this.currentAction.getTimestepsRemaining() === 0) {
+                if ((this.actionQueue.length == 0)) {
+                    return null;
+                }
+                else {
+                    return ((s) => { return s[s.length - 1]; })(this.actionQueue).peek();
+                }
+            }
+            else {
+                return this.currentAction.peek();
+            }
+        }
+        /**
+         * Adds a new action to the end of the queue. If this is the first action to be added, it is loaded up as the
+         * current action. All added actions are copied internally.
+         *
+         * @param {actions.Action} action Action to add to the end of the queue as a copy. Does not influence current polling of the queue
+         * elements.
+         */
+        addAction(action) {
+            if (action.getTimestepsTotal() === 0)
+                return;
+            let localCopy = action.getCopy();
+            /* add */ (this.actionQueue.push(localCopy) > 0);
+            /* add */ (this.actionListFull.push(localCopy) > 0);
+            if (this.currentAction == null) {
+                this.currentAction = (a => a.length == 0 ? null : a.shift())(this.actionQueue);
+            }
+            this.__isEmpty = false;
+        }
+        addSequence$actions_Action_A(actions) {
+            if (actions.length === 0)
+                throw Object.defineProperty(new Error("Tried to add an empty array of actions to a queue."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+            for (let index121 = 0; index121 < actions.length; index121++) {
+                let action = actions[index121];
+                {
+                    this.addAction(action);
+                }
+            }
+        }
+        /**
+         * Add a sequence of actions. All added actions are copied.
+         *
+         * @param {Array} actions Array of actions to add to the end of the queue. They are copied, and adding does not influence
+         * polling of the existing queue.
+         */
+        addSequence(actions) {
+            if (((actions != null && actions instanceof Array && (actions.length == 0 || actions[0] == null || (actions[0] != null && actions[0] instanceof actions.Action))) || actions === null)) {
+                return this.addSequence$actions_Action_A(actions);
+            }
+            else if (((actions != null && (actions instanceof Array)) || actions === null)) {
+                return this.addSequence$java_util_List(actions);
+            }
+            else
+                throw new Error('invalid overload');
+        }
+        addSequence$java_util_List(actions) {
+            if (actions.length === 0)
+                throw Object.defineProperty(new Error("Tried to add an empty array of actions to a queue."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
+            for (let index122 = 0; index122 < actions.length; index122++) {
+                let action = actions[index122];
+                {
+                    this.addAction(action);
+                }
+            }
+        }
+        /**
+         * Request the next QWOP keypress commands from the added sequence. Automatically advances between actions.
+         *
+         * @return {Array} Get the next command (QWOP true/false array) on the queue.
+         */
+        pollCommand() {
+            if ((this.actionQueue.length == 0) && !this.currentAction.hasNext()) {
+                throw Object.defineProperty(new Error("Tried to get a command off the queue when nothing is queued up."), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.IndexOutOfBoundsException', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.Exception'] });
+            }
+            if (!this.currentAction.hasNext()) {
+                this.currentAction.reset();
+                this.currentAction = (a => a.length == 0 ? null : a.shift())(this.actionQueue);
+                /* requireNonNull */ if (this.currentAction == null) {
+                    throw new Error('cannot be null');
+                }
+                ;
+            }
+            let nextCommand = this.currentAction.poll();
+            if (!this.currentAction.hasNext() && (this.actionQueue.length == 0)) {
+                this.__isEmpty = true;
+            }
+            this.commandsPolled++;
+            return nextCommand;
+        }
+        /**
+         * Remove everything from the queues and reset the sequence.
+         */
+        clearAll() {
+            /* clear */ (this.actionQueue.length = 0);
+            /* clear */ (this.actionListFull.length = 0);
+            if (this.currentAction != null)
+                this.currentAction.reset();
+            this.currentAction = null;
+            this.__isEmpty = true;
+        }
+        /**
+         * Check if the queue has anything in it.
+         *
+         * @return {boolean} Whether this queue has more commands left to poll.
+         */
+        isEmpty() {
+            return this.__isEmpty;
+        }
+        /**
+         * Get all the actions in this queue.
+         *
+         * @return {Array} All actions in this queue, including ones which have already been executed.
+         */
+        getActionsInCurrentRun() {
+            return this.actionListFull.slice(0);
+        }
+        /**
+         * Index of the current action. 0 is the first {@link Action}.
+         *
+         * @return {number} Index of the current action.
+         */
+        getCurrentActionIdx() {
+            let currIdx = this.actionListFull.length - this.actionQueue.length - 1;
+            return currIdx;
+        }
+        /**
+         * Resets all progress on the queue making it ready to execute the same actions again. Note that to actually
+         * remove actions, you should use {@link ActionQueue#clearAll()}.
+         */
+        resetQueue() {
+            let actions = this.getActionsInCurrentRun();
+            this.clearAll();
+            this.addSequence$actions_Action_A(actions);
+        }
+        /**
+         * Get a copy of this ActionQueue, with none of the actions performed yet.
+         *
+         * @return {actions.ActionQueue} An ActionQueue with all the same actions, but no progress in them done yet.
+         */
+        getCopyOfUnexecutedQueue() {
+            let actionQueueCopy = new ActionQueue();
+            actionQueueCopy.addSequence$actions_Action_A(this.getActionsInCurrentRun());
+            return actionQueueCopy;
+        }
+        /**
+         * Get a copy of this ActionQueue, with the same actions, and the same progress made on those actions.
+         *
+         * @return {actions.ActionQueue} An ActionQueue which should behave identically to the original.
+         */
+        getCopyOfQueueAtExecutionPoint() {
+            let actionQueueCopy = this.getCopyOfUnexecutedQueue();
+            for (let i = 0; i < this.commandsPolled; i++) {
+                {
+                    actionQueueCopy.pollCommand();
+                }
+                ;
+            }
+            return actionQueueCopy;
+        }
+        /**
+         * Gives the total duration of this action queue in timesteps. This does not depend on the number of timesteps
+         * already executed on this queue.
+         *
+         * @return {number} Total duration of this queue in timesteps.
+         */
+        getTotalQueueLengthTimesteps() {
+            let totalTS = 0;
+            for (let index123 = 0; index123 < this.actionListFull.length; index123++) {
+                let a = this.actionListFull[index123];
+                {
+                    totalTS += a.getTimestepsTotal();
+                }
+            }
+            return totalTS;
+        }
+    }
+    actions_1.ActionQueue = ActionQueue;
+    ActionQueue["__class"] = "actions.ActionQueue";
+})(actions || (actions = {}));
 var org;
 (function (org) {
     var jbox2d;
@@ -2259,36 +2760,36 @@ var org;
                         this.connectionsUR = ([]);
                     }
                     updateSprings() {
-                        for (let index121 = 0; index121 < this.connections.length; index121++) {
-                            let iiff = this.connections[index121];
+                        for (let index124 = 0; index124 < this.connections.length; index124++) {
+                            let iiff = this.connections[index124];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (let index122 = 0; index122 < this.connectionsR.length; index122++) {
-                            let iiff = this.connectionsR[index122];
+                        for (let index125 = 0; index125 < this.connectionsR.length; index125++) {
+                            let iiff = this.connectionsR[index125];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (let index123 = 0; index123 < this.connectionsDR.length; index123++) {
-                            let iiff = this.connectionsDR[index123];
+                        for (let index126 = 0; index126 < this.connectionsDR.length; index126++) {
+                            let iiff = this.connectionsDR[index126];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (let index124 = 0; index124 < this.connectionsD.length; index124++) {
-                            let iiff = this.connectionsD[index124];
+                        for (let index127 = 0; index127 < this.connectionsD.length; index127++) {
+                            let iiff = this.connectionsD[index127];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
                             }
                         }
-                        for (let index125 = 0; index125 < this.connectionsUR.length; index125++) {
-                            let iiff = this.connectionsUR[index125];
+                        for (let index128 = 0; index128 < this.connectionsUR.length; index128++) {
+                            let iiff = this.connectionsUR[index128];
                             {
                                 iiff.c = this.currentFrequency;
                                 iiff.d = this.currentDamping;
@@ -5458,8 +5959,8 @@ var org;
                             this.world = null;
                         (() => {
                             let w = null;
-                            for (let index126 = 0; index126 < bodies.length; index126++) {
-                                let b = bodies[index126];
+                            for (let index129 = 0; index129 < bodies.length; index129++) {
+                                let b = bodies[index129];
                                 {
                                     /* add */ ((s, e) => { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -5487,8 +5988,8 @@ var org;
                             this.world = null;
                         (() => {
                             let w = null;
-                            for (let index127 = 0; index127 < groups.length; index127++) {
-                                let bg = groups[index127];
+                            for (let index130 = 0; index130 < groups.length; index130++) {
+                                let bg = groups[index130];
                                 {
                                     /* add */ ((s, e) => { if (s.indexOf(e) == -1) {
                                         s.push(e);
@@ -5533,8 +6034,8 @@ var org;
                 getBodiesDeep() {
                     let res = ([]);
                     /* addAll */ ((l1, l2) => l1.push.apply(l1, l2))(res, this.bodies);
-                    for (let index128 = 0; index128 < this.children.length; index128++) {
-                        let bg = this.children[index128];
+                    for (let index131 = 0; index131 < this.children.length; index131++) {
+                        let bg = this.children[index131];
                         {
                             /* addAll */ ((l1, l2) => l1.push.apply(l1, l2))(res, bg.getBodiesDeep());
                         }
@@ -9950,8 +10451,8 @@ var game;
                 }
                 /*private*/ getConnectedBodyIsland_impl(parent, parentResult) {
                     let connected = this.getConnectedBodies();
-                    for (let index129 = 0; index129 < connected.length; index129++) {
-                        let b = connected[index129];
+                    for (let index132 = 0; index132 < connected.length; index132++) {
+                        let b = connected[index132];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -9988,8 +10489,8 @@ var game;
                 }
                 /*private*/ getConnectedDynamicBodyIsland_impl(parent, parentResult) {
                     let connected = this.getConnectedBodies();
-                    for (let index130 = 0; index130 < connected.length; index130++) {
-                        let b = connected[index130];
+                    for (let index133 = 0; index133 < connected.length; index133++) {
+                        let b = connected[index133];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -10025,8 +10526,8 @@ var game;
                 }
                 /*private*/ getTouchingBodyIsland_impl(parent, parentResult) {
                     let touching = this.getBodiesInContact();
-                    for (let index131 = 0; index131 < touching.length; index131++) {
-                        let b = touching[index131];
+                    for (let index134 = 0; index134 < touching.length; index134++) {
+                        let b = touching[index134];
                         {
                             if (b === parent || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -10060,8 +10561,8 @@ var game;
                 }
                 /*private*/ getTouchingDynamicBodyIsland_impl(parent, parentResult) {
                     let touching = this.getBodiesInContact();
-                    for (let index132 = 0; index132 < touching.length; index132++) {
-                        let b = touching[index132];
+                    for (let index135 = 0; index135 < touching.length; index135++) {
+                        let b = touching[index135];
                         {
                             if (b === parent || !b.isDynamic() || (parentResult.indexOf((b)) >= 0))
                                 continue;
@@ -22135,8 +22636,8 @@ var game;
                  * @private
                  */
                 /*private*/ postStep(dt, iterations) {
-                    for (let index133 = 0; index133 < this.postStepList.length; index133++) {
-                        let s = this.postStepList[index133];
+                    for (let index136 = 0; index136 < this.postStepList.length; index136++) {
+                        let s = this.postStepList[index136];
                         {
                             s.step(dt, iterations);
                         }
@@ -23390,10 +23891,12 @@ var game;
             this.m_world.setContinuousPhysics(true);
             this.trackBody = this.m_world.createBody(GameSingleThread.trackDef_$LI$());
             this.trackBody.createShape(GameSingleThread.trackShape_$LI$());
-            this.rFootBody = this.getWorld().createBody(GameSingleThread.rFootDef_$LI$());
-            this.lFootBody = this.getWorld().createBody(GameSingleThread.lFootDef_$LI$());
-            this.rFootBody.createShape(GameSingleThread.rFootShape_$LI$());
-            this.lFootBody.createShape(GameSingleThread.lFootShape_$LI$());
+            if (!GameSingleThread.noFeet) {
+                this.rFootBody = this.getWorld().createBody(GameSingleThread.rFootDef_$LI$());
+                this.lFootBody = this.getWorld().createBody(GameSingleThread.lFootDef_$LI$());
+                this.rFootBody.createShape(GameSingleThread.rFootShape_$LI$());
+                this.lFootBody.createShape(GameSingleThread.lFootShape_$LI$());
+            }
             this.rCalfBody = this.getWorld().createBody(GameSingleThread.rCalfDef_$LI$());
             this.lCalfBody = this.getWorld().createBody(GameSingleThread.lCalfDef_$LI$());
             this.rCalfBody.createShape(GameSingleThread.rCalfShape_$LI$());
@@ -23414,33 +23917,35 @@ var game;
             this.torsoBody.createShape(GameSingleThread.torsoShape_$LI$());
             this.headBody = this.getWorld().createBody(GameSingleThread.headDef_$LI$());
             this.headBody.createShape(GameSingleThread.headShape_$LI$());
-            this.rAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
-            this.rAnkleJDef.initialize(this.rFootBody, this.rCalfBody, GameSingleThread.rAnklePos_$LI$());
-            this.rAnkleJDef.enableLimit = true;
-            this.rAnkleJDef.upperAngle = 0.5;
-            this.rAnkleJDef.lowerAngle = -0.5;
-            this.rAnkleJDef.enableMotor = false;
-            this.rAnkleJDef.maxMotorTorque = 2000.0;
-            this.rAnkleJDef.motorSpeed = 0.0;
-            this.rAnkleJDef.collideConnected = false;
-            this.rAnkleJ = this.getWorld().createJoint(this.rAnkleJDef);
-            this.lAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
-            this.lAnkleJDef.initialize(this.lFootBody, this.lCalfBody, GameSingleThread.lAnklePos_$LI$());
-            this.lAnkleJDef.enableLimit = true;
-            this.lAnkleJDef.upperAngle = 0.5;
-            this.lAnkleJDef.lowerAngle = -0.5;
-            this.lAnkleJDef.enableMotor = false;
-            this.lAnkleJDef.maxMotorTorque = 2000;
-            this.lAnkleJDef.motorSpeed = 0.0;
-            this.lAnkleJDef.collideConnected = false;
-            this.lAnkleJ = this.getWorld().createJoint(this.lAnkleJDef);
+            if (!GameSingleThread.noFeet) {
+                this.rAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
+                this.rAnkleJDef.initialize(this.rFootBody, this.rCalfBody, GameSingleThread.rAnklePos_$LI$());
+                this.rAnkleJDef.enableLimit = true;
+                this.rAnkleJDef.upperAngle = 0.5;
+                this.rAnkleJDef.lowerAngle = -0.5;
+                this.rAnkleJDef.enableMotor = false;
+                this.rAnkleJDef.maxMotorTorque = 2000.0;
+                this.rAnkleJDef.motorSpeed = 0.0;
+                this.rAnkleJDef.collideConnected = false;
+                this.rAnkleJ = this.getWorld().createJoint(this.rAnkleJDef);
+                this.lAnkleJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
+                this.lAnkleJDef.initialize(this.lFootBody, this.lCalfBody, GameSingleThread.lAnklePos_$LI$());
+                this.lAnkleJDef.enableLimit = true;
+                this.lAnkleJDef.upperAngle = 0.5;
+                this.lAnkleJDef.lowerAngle = -0.5;
+                this.lAnkleJDef.enableMotor = false;
+                this.lAnkleJDef.maxMotorTorque = 2000.0;
+                this.lAnkleJDef.motorSpeed = 0.0;
+                this.lAnkleJDef.collideConnected = false;
+                this.lAnkleJ = this.getWorld().createJoint(this.lAnkleJDef);
+            }
             this.rKneeJDef = new org.jbox2d.dynamics.joints.RevoluteJointDef();
             this.rKneeJDef.initialize(this.rCalfBody, this.rThighBody, GameSingleThread.rKneePos_$LI$());
             this.rKneeJDef.enableLimit = true;
             this.rKneeJDef.upperAngle = 0.3;
             this.rKneeJDef.lowerAngle = -1.3;
             this.rKneeJDef.enableMotor = true;
-            this.rKneeJDef.maxMotorTorque = 3000;
+            this.rKneeJDef.maxMotorTorque = 3000.0;
             this.rKneeJDef.motorSpeed = 0.0;
             this.rKneeJDef.collideConnected = false;
             this.rKneeJ = this.getWorld().createJoint(this.rKneeJDef);
@@ -23450,7 +23955,7 @@ var game;
             this.lKneeJDef.upperAngle = 0.0;
             this.lKneeJDef.lowerAngle = -1.6;
             this.lKneeJDef.enableMotor = true;
-            this.lKneeJDef.maxMotorTorque = 3000;
+            this.lKneeJDef.maxMotorTorque = 3000.0;
             this.lKneeJDef.motorSpeed = 0.0;
             this.lKneeJDef.collideConnected = false;
             this.lKneeJ = this.getWorld().createJoint(this.lKneeJDef);
@@ -23542,6 +24047,21 @@ var game;
                 GameSingleThread.shapeList_$LI$()[12] = this.trackBody.getShapeList();
             }
         }
+        setMaxMotorTorque(torqueLimitMultiplier) {
+            if (!GameSingleThread.noFeet) {
+                this.rAnkleJ.setMaxMotorTorque(Math.fround(2000.0 * torqueLimitMultiplier));
+                this.lAnkleJ.setMaxMotorTorque(Math.fround(2000.0 * torqueLimitMultiplier));
+            }
+            this.rKneeJ.setMaxMotorTorque(Math.fround(3000.0 * torqueLimitMultiplier));
+            this.lKneeJ.setMaxMotorTorque(Math.fround(3000.0 * torqueLimitMultiplier));
+            this.rHipJ.setMaxMotorTorque(Math.fround(6000.0 * torqueLimitMultiplier));
+            this.lHipJ.setMaxMotorTorque(Math.fround(6000.0 * torqueLimitMultiplier));
+            this.neckJ.setMaxMotorTorque(Math.fround(1000.0 * torqueLimitMultiplier));
+            this.rShoulderJ.setMaxMotorTorque(Math.fround(1000.0 * torqueLimitMultiplier));
+            this.lShoulderJ.setMaxMotorTorque(Math.fround(1000.0 * torqueLimitMultiplier));
+            this.rElbowJ.setMaxMotorTorque(0.0);
+            this.lElbowJ.setMaxMotorTorque(0.0);
+        }
         stepGame$boolean_A(command) {
             if (command.length !== 4) {
                 throw Object.defineProperty(new Error("Command is not the correct length. Expected 4, got: " + command.length), '__classes', { configurable: true, value: ['java.lang.Throwable', 'java.lang.Object', 'java.lang.RuntimeException', 'java.lang.IllegalArgumentException', 'java.lang.Exception'] });
@@ -23601,7 +24121,7 @@ var game;
                 this.lShoulderJ.m_motorSpeed = (0.0);
                 this.rShoulderJ.m_motorSpeed = (0.0);
             }
-            if (q || w) {
+            if (q || w && !GameSingleThread.noFeet) {
                 let RAnkleCur = this.rAnkleJ.getAnchor1();
                 let LAnkleCur = this.lAnkleJ.getAnchor1();
                 let RHipCur = this.rHipJ.getAnchor1();
@@ -23681,7 +24201,7 @@ var game;
          * @return {game.State}
          */
         getCurrentState() {
-            return new game.State(this.getCurrentBodyState(this.torsoBody), this.getCurrentBodyState(this.headBody), this.getCurrentBodyState(this.rThighBody), this.getCurrentBodyState(this.lThighBody), this.getCurrentBodyState(this.rCalfBody), this.getCurrentBodyState(this.lCalfBody), this.getCurrentBodyState(this.rFootBody), this.getCurrentBodyState(this.lFootBody), this.getCurrentBodyState(this.rUArmBody), this.getCurrentBodyState(this.lUArmBody), this.getCurrentBodyState(this.rLArmBody), this.getCurrentBodyState(this.lLArmBody), this.getFailureStatus());
+            return new game.State(this.getCurrentBodyState(this.torsoBody), this.getCurrentBodyState(this.headBody), this.getCurrentBodyState(this.rThighBody), this.getCurrentBodyState(this.lThighBody), this.getCurrentBodyState(this.rCalfBody), this.getCurrentBodyState(this.lCalfBody), GameSingleThread.noFeet ? new game.StateVariable(0, 0, 0, 0, 0, 0) : this.getCurrentBodyState(this.rFootBody), GameSingleThread.noFeet ? new game.StateVariable(0, 0, 0, 0, 0, 0) : this.getCurrentBodyState(this.lFootBody), this.getCurrentBodyState(this.rUArmBody), this.getCurrentBodyState(this.lUArmBody), this.getCurrentBodyState(this.rLArmBody), this.getCurrentBodyState(this.lLArmBody), this.getFailureStatus());
         }
         /**
          * Get a new StateVariable for a given body.
@@ -23715,6 +24235,21 @@ var game;
             return GameSingleThread.timestepsSimulated;
         }
         /**
+         * Change world gravity.
+         *
+         * @param {number} xGrav x component of gravity.
+         * @param {number} yGrav y component of gravity -- positive is down.
+         */
+        setGravity(xGrav, yGrav) {
+            this.getWorld().setGravity(new org.jbox2d.common.Vec2(xGrav, yGrav));
+        }
+        setMaxTorqueMultiplier(multiplier) {
+            this.setMaxMotorTorque(multiplier);
+        }
+        setPointFeet(usePointFeet) {
+            GameSingleThread.noFeet = usePointFeet;
+        }
+        /**
          * Get vertices for debug drawing. Each array in the list will have:
          * 8 floats for rectangles (x1,y1,x2,y2,...).
          * 3 floats for circles (x,y,radius).
@@ -23727,7 +24262,13 @@ var game;
             let vertHolder = new GameSingleThread.VertHolder(this);
             vertHolder.groundHeight = org.jbox2d.common.XForm.mul(this.trackBody.getXForm(), /* get */ GameSingleThread.trackShape_$LI$().vertices[0]).y;
             vertHolder.torsoX = this.torsoBody.getPosition().x;
-            let bodies = [this.rFootBody, this.lFootBody, this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            let bodies;
+            if (!GameSingleThread.noFeet) {
+                bodies = [this.rFootBody, this.lFootBody, this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            }
+            else {
+                bodies = [this.rCalfBody, this.lCalfBody, this.rThighBody, this.lThighBody, this.torsoBody, this.rUArmBody, this.lUArmBody, this.rLArmBody, this.lLArmBody];
+            }
             for (let i = 0; i < bodies.length; i++) {
                 {
                     let xf = bodies[i].getXForm();
@@ -23755,6 +24296,7 @@ var game;
      */
     GameSingleThread.timestepsSimulated = 0;
     GameSingleThread.hasOneTimeInitializationHappened = false;
+    GameSingleThread.noFeet = false;
     game.GameSingleThread = GameSingleThread;
     GameSingleThread["__class"] = "game.GameSingleThread";
     (function (GameSingleThread) {
@@ -23853,7 +24395,7 @@ var game;
                 } })(fixtureB.m_body, this.__parent.rThighBody)) {
                     this.__parent.isFailed = true;
                 }
-                else if (((o1, o2) => { if (o1 && o1.equals) {
+                else if (!game.GameSingleThread.noFeet && ((o1, o2) => { if (o1 && o1.equals) {
                     return o1.equals(o2);
                 }
                 else {
@@ -23866,7 +24408,7 @@ var game;
                 } })(fixtureB.m_body, this.__parent.rFootBody)) {
                     this.rFootDown = true;
                 }
-                else if (((o1, o2) => { if (o1 && o1.equals) {
+                else if (!game.GameSingleThread.noFeet && ((o1, o2) => { if (o1 && o1.equals) {
                     return o1.equals(o2);
                 }
                 else {
@@ -23893,7 +24435,7 @@ var game;
             remove(point) {
                 let fixtureA = point.shape1;
                 let fixtureB = point.shape2;
-                if (((o1, o2) => { if (o1 && o1.equals) {
+                if (!game.GameSingleThread.noFeet && ((o1, o2) => { if (o1 && o1.equals) {
                     return o1.equals(o2);
                 }
                 else {
@@ -23906,7 +24448,7 @@ var game;
                 } })(fixtureB.m_body, this.__parent.rFootBody)) {
                     this.rFootDown = false;
                 }
-                else if (((o1, o2) => { if (o1 && o1.equals) {
+                else if (!game.GameSingleThread.noFeet && ((o1, o2) => { if (o1 && o1.equals) {
                     return o1.equals(o2);
                 }
                 else {

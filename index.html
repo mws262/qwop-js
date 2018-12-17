@@ -9,7 +9,9 @@
     />
 </head>
 <body>
+
 <canvas id="canvas" width="500" height="300"></canvas>
+
 <div class="container">
     <div id="qbutton" class="fixed">Q</div>
     <div id="wbutton" class="fixed">W</div>
@@ -19,6 +21,51 @@
     <div id="obutton" class="fixed">O</div>
     <div id="pbutton" class="fixed">P</div>
 </div>
+
+<button class="collapsible">Expand options</button>
+<div class="content">
+    <div class="slidecontainer">
+        Vertical gravity (default 10): <span id="yGravityVal"></span>
+        <input type="range" min="-50" max="100" value="10" class="slider" id="yGravitySlider">
+    </div>
+    <div class="slidecontainer">
+        Max torque multiplier (default 1.0): <span id="maxTorqueMultVal"></span>
+        <input type="range" min="0" max="100" value="10" class="slider" id="maxTorqueMultSlider">
+    </div>
+    <div class="slidecontainer">
+        <input type="checkbox" id="usePointFeet">Use point-feet (default false)?<br>
+    </div>
+
+</div>
+
+<button class="collapsible">Command queueing</button>
+<div class="content">
+    <div class="slidecontainer">
+        Enter a sequence of key hold times in (none, none), (w,o), (none,none), (q,p), (none,none) command sequence
+        (advanced). These should be comma-separated, non-negative integers.
+        <textarea rows="4" cols="50" id="sequenceTextbox"></textarea>
+    </div>
+    <div>
+        <button type = "button" id="sequenceGoButton">Go!</button>
+    </div>
+</div>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+</script>
 <script src="target/js/bundle.js"></script>
 <script src="webapp/game_setup.js"></script>
 </body>

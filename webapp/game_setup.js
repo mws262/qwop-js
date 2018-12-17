@@ -8,6 +8,13 @@ var ctx;
 var width;
 var height;
 var qwopGame = new game.GameSingleThread();
+var yGravitySlider = document.getElementById('yGravitySlider');
+var maxTorqueMultSlider = document.getElementById('maxTorqueMultSlider');
+var pointFeetCheckbox = document.getElementById('usePointFeet');
+var actionQueue = new actions.ActionQueue();
+var sequenceTextbox = document.getElementById('sequenceTextbox');
+var sequenceGoButton = document.getElementById('sequenceGoButton');
+
 var scaling = 17;
 var xOffset = 100;
 var yOffset = 300;
@@ -19,7 +26,17 @@ var p = false;
 var loop = function() {
 
     // Step the physics forward in time.
+    if (!actionQueue.isEmpty()) {
+        var command = actionQueue.pollCommand();
+        q = command[0];
+        w = command[1];
+        o = command[2];
+        p = command[3];
+    }
+
     qwopGame.stepGame(q, w, o, p);
+
+
     // Get the body shape vertices from the game.
     var bodyVerts = qwopGame.getDebugVertices();
 
@@ -82,6 +99,16 @@ var setCanvasDimensions = function(){
     yOffset = Math.min(300, height/2.2);
 };
 
+var resetRunner = function() {
+    q = false;
+    w = false;
+    o = false;
+    p = false;
+    qwopGame.makeNewWorld();
+    qwopGame.setGravity(0., parseFloat(yGravitySlider.value));
+    qwopGame.setMaxTorqueMultiplier(parseFloat(maxTorqueMultSlider.value) / 10);
+};
+
 var setup = function() {
 
     window.onresize = setCanvasDimensions;
@@ -104,6 +131,47 @@ var setup = function() {
     var pbutton = document.getElementById('pbutton');
     var resetbutton = document.getElementById('resetbutton');
 
+    var yGravityVal = document.getElementById('yGravityVal');
+    var maxTorqueMultVal = document.getElementById('maxTorqueMultVal');
+
+    yGravityVal.innerHTML = yGravitySlider.value;
+
+    yGravitySlider.oninput = function() {
+        yGravityVal.innerHTML = this.value;
+        qwopGame.setGravity(0., parseFloat(this.value));
+    };
+
+    maxTorqueMultSlider.oninput = function() {
+        maxTorqueMultVal.innerHTML = this.value / 10;
+        qwopGame.setMaxTorqueMultiplier(parseFloat(this.value) / 10);
+    };
+
+    // Turn on/off point feet (resets the game too).
+    pointFeetCheckbox.oninput = function() {
+        qwopGame.setPointFeet(pointFeetCheckbox.checked);
+        resetRunner()
+    };
+
+    sequenceGoButton.onclick = function() {
+        var sequenceStrArray = sequenceTextbox.value.split(',');
+        actionQueue.clearAll();
+        var currentKeyPos = 0;
+        var keyOrder = [[false, false, false, false],
+        [false, true, true, false], [false, false, false, false], [true, false, false, true]];
+
+        for (let idx = 0; idx < sequenceStrArray.length; idx++) {
+            actionQueue.addAction(new actions.Action(parseInt(sequenceStrArray[idx]),
+                keyOrder[currentKeyPos][0],
+                keyOrder[currentKeyPos][1],
+                keyOrder[currentKeyPos][2],
+                keyOrder[currentKeyPos][3]));
+            currentKeyPos++;
+            currentKeyPos %= 4;
+        }
+        resetRunner();
+    };
+
+
     // QWOP and R reset key listeners.
     window.addEventListener('keydown', function(event) {
         switch (event.key) {
@@ -125,11 +193,7 @@ var setup = function() {
                 break;
             case 'r':
                 resetbutton.style.borderStyle = "inset";
-                q = false;
-                w = false;
-                o = false;
-                p = false;
-                qwopGame.makeNewWorld();
+                resetRunner();
                 break;
         }
     }, false);
@@ -196,11 +260,7 @@ var setup = function() {
     }, false);
 
     resetbutton.addEventListener('touchstart', function(event) {
-        q = false;
-        w = false;
-        o = false;
-        p = false;
-        qwopGame.makeNewWorld();
+        resetRunner();
         resetbutton.style.borderStyle = "inset";
     }, false);
 
@@ -209,11 +269,7 @@ var setup = function() {
     }, false);
 
     resetbutton.addEventListener('mousedown', function(event) {
-        q = false;
-        w = false;
-        o = false;
-        p = false;
-        qwopGame.makeNewWorld();
+        resetRunner();
         resetbutton.style.borderStyle = "inset";
     }, false);
 

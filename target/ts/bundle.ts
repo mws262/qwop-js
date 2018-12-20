@@ -16780,12 +16780,11 @@ namespace game {
     /**
      * '
      * NOTE: PREFER {@link GameThreadSafe} OVER THIS IMPLEMENTATION.
-     * 
+     * <p>
      * This creates the QWOP game using the Box2D library. This operates on the primary classloader. This means that
      * multiple instances of this class will interfere with others due to static information inside Box2D.
      * {@link GameThreadSafe} uses a separate classloader for each instance and can be done in multithreaded applications.
      * However, dealing with all the reflection in GameThreadSafe is really annoying. Hence, this class is more readable.
-     * 
      * 
      * @author matt
      * @class
@@ -17549,11 +17548,29 @@ namespace game {
         }
 
         /**
+         * Apply a disturbance impulse to the body COM.
+         * @param {number} xComp
+         * @param {number} yComp
+         */
+        public applyBodyImpulse(xComp : number, yComp : number) {
+            let torsoCenter : org.jbox2d.common.Vec2 = this.torsoBody.getWorldCenter();
+            this.torsoBody.applyImpulse(new org.jbox2d.common.Vec2(xComp, yComp), torsoCenter);
+        }
+
+        /**
+         * Apply a disturbance torque to the body.
+         * @param {number} cwTorque
+         */
+        public applyBodyTorque(cwTorque : number) {
+            this.torsoBody.applyTorque(cwTorque);
+        }
+
+        /**
          * Get vertices for debug drawing. Each array in the list will have:
          * 8 floats for rectangles (x1,y1,x2,y2,...).
          * 3 floats for circles (x,y,radius).
          * 1 float for ground (height).
-         * 
+         * <p>
          * This is primarily for drawing using external tools, e.g. in MATLAB.
          * @return {game.GameSingleThread.VertHolder}
          */

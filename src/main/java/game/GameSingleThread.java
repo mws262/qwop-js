@@ -14,16 +14,19 @@ import org.jbox2d.dynamics.contacts.ContactPoint;
 import org.jbox2d.dynamics.contacts.ContactResult;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
+
+import java.lang.reflect.InvocationTargetException;
+
 import static game.GameConstants.*;
 
-/**'
+/**
+ * '
  * NOTE: PREFER {@link GameThreadSafe} OVER THIS IMPLEMENTATION.
- *
+ * <p>
  * This creates the QWOP game using the Box2D library. This operates on the primary classloader. This means that
  * multiple instances of this class will interfere with others due to static information inside Box2D.
  * {@link GameThreadSafe} uses a separate classloader for each instance and can be done in multithreaded applications.
  * However, dealing with all the reflection in GameThreadSafe is really annoying. Hence, this class is more readable.
- *
  *
  * @author matt
  */
@@ -570,6 +573,7 @@ public class GameSingleThread {
         }
         stepGame(command[0], command[1], command[2], command[3]);
     }
+
     /**
      * Step the game forward 1 timestep with the specified keys pressed.
      **/
@@ -726,8 +730,8 @@ public class GameSingleThread {
                 getCurrentBodyState(lThighBody),
                 getCurrentBodyState(rCalfBody),
                 getCurrentBodyState(lCalfBody),
-                noFeet ? new StateVariable(0,0,0,0,0,0) : getCurrentBodyState(rFootBody),
-                noFeet ? new StateVariable(0,0,0,0,0,0) : getCurrentBodyState(lFootBody),
+                noFeet ? new StateVariable(0, 0, 0, 0, 0, 0) : getCurrentBodyState(rFootBody),
+                noFeet ? new StateVariable(0, 0, 0, 0, 0, 0) : getCurrentBodyState(lFootBody),
                 getCurrentBodyState(rUArmBody),
                 getCurrentBodyState(lUArmBody),
                 getCurrentBodyState(rLArmBody),
@@ -790,12 +794,28 @@ public class GameSingleThread {
         massData.I = torsoMassData.I * multiplier;
         torsoBody.setMass(massData);
     }
+
+    /**
+     * Apply a disturbance impulse to the body COM.
+     */
+    public void applyBodyImpulse(float xComp, float yComp) {
+        Vec2 torsoCenter = torsoBody.getWorldCenter();
+        torsoBody.applyImpulse(new Vec2(xComp, yComp), torsoCenter);
+    }
+
+    /**
+     * Apply a disturbance torque to the body.
+     */
+    public void applyBodyTorque(float cwTorque) {
+        torsoBody.applyTorque(cwTorque);
+    }
+
     /**
      * Get vertices for debug drawing. Each array in the list will have:
      * 8 floats for rectangles (x1,y1,x2,y2,...).
      * 3 floats for circles (x,y,radius).
      * 1 float for ground (height).
-     *
+     * <p>
      * This is primarily for drawing using external tools, e.g. in MATLAB.
      **/
     public VertHolder getDebugVertices() {
@@ -821,8 +841,8 @@ public class GameSingleThread {
             Vec2[] shapeVerts = shape.m_vertices;
             for (int j = 0; j < shapeVerts.length; j++) {
                 Vec2 vert = XForm.mul(xf, shapeVerts[j]);
-                vertHolder.bodyVerts[i][2*j] = vert.x;
-                vertHolder.bodyVerts[i][2*j + 1] = vert.y;
+                vertHolder.bodyVerts[i][2 * j] = vert.x;
+                vertHolder.bodyVerts[i][2 * j + 1] = vert.y;
             }
         }
 

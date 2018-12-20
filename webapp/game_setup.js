@@ -13,10 +13,19 @@ var yGravitySlider = document.getElementById('yGravitySlider');
 var maxTorqueMultSlider = document.getElementById('maxTorqueMultSlider');
 var torsInertiaMultSlider = document.getElementById('torsInertiaMultSlider');
 var pointFeetCheckbox = document.getElementById('usePointFeet');
+
+var torsoAngleStabilization = false;
 var torsoAngleStabilizerCheckbox = document.getElementById('useTorsoAngleStabilizer');
 var torsoAngleStabilizerGainSlider = document.getElementById('torsoStabilizerGainSlider');
-var torsoAngleStabilizerK = 10000;
-var torsoAngleStabilizerC = 1000;
+var torsoAngleStabilizerK = 0;
+var torsoAngleStabilizerC = 0;
+
+var torsoVerticalStabilization = false;
+var torsoVerticalStabilizerCheckbox = document.getElementById('useTorsoVerticalStabilizer');
+var torsoVerticalStabilizerGainSlider = document.getElementById('torsoVerticalStabilizerSlider');
+var torsoVerticalStabilizerK = 0;
+var torsoVerticalStabilizerC = 0;
+
 var actionQueue = new actions.ActionQueue();
 var sequenceTextbox = document.getElementById('sequenceTextbox');
 var sequenceGoButton = document.getElementById('sequenceGoButton');
@@ -29,7 +38,6 @@ var w = false;
 var o = false;
 var p = false;
 
-var torsoAngleStabilization = false;
 
 var loop = function() {
 
@@ -47,6 +55,13 @@ var loop = function() {
         var currState = qwopGame.getCurrentState();
         qwopGame.applyBodyTorque(torsoAngleStabilizerK*(qwopInitialState.body.getTh() - currState.body.getTh() - 0.2)
          - torsoAngleStabilizerC * currState.body.getDth());
+    }
+
+    // PD controller on torso vertical position using hand of god.
+    if (torsoVerticalStabilization) {
+        var currState = qwopGame.getCurrentState();
+        qwopGame.applyBodyImpulse(0, torsoVerticalStabilizerK * (qwopInitialState.body.getY() - currState.body.getY())
+        - torsoVerticalStabilizerC * currState.body.getDy());
     }
 
     qwopGame.stepGame(q, w, o, p);
@@ -149,6 +164,8 @@ var setup = function() {
     var yGravityVal = document.getElementById('yGravityVal');
     var maxTorqueMultVal = document.getElementById('maxTorqueMultVal');
     var torsoInertiaMultVal = document.getElementById('torsoInertiaMultVal');
+    var torsoStabilizerGainVal = document.getElementById('torsoStabilizerGainValue');
+    var torsoVertStabilizerGainVal = document.getElementById('torsoVertStabilizerGainVal');
 
     yGravityVal.innerHTML = yGravitySlider.value;
 
@@ -177,8 +194,8 @@ var setup = function() {
     torsoAngleStabilizerCheckbox.oninput = function() {
         torsoAngleStabilization = torsoAngleStabilizerCheckbox.checked;
         torsoAngleStabilizerGainSlider.hidden = !torsoAngleStabilization;
-        document.getElementById('torsoStabilizerGainValue').hidden = !torsoAngleStabilization;
-        document.getElementById('torsoStabilizerGainValue').innerHTML = "Strength: " + torsoAngleStabilizerGainSlider.value;
+        torsoStabilizerGainVal.hidden = !torsoAngleStabilization;
+        torsoStabilizerGainVal.innerHTML = "Strength: " + torsoAngleStabilizerGainSlider.value;
         torsoAngleStabilizerK = torsoAngleStabilizerGainSlider.value * 100;
         torsoAngleStabilizerC = torsoAngleStabilizerGainSlider.value * 10;
     };
@@ -186,7 +203,23 @@ var setup = function() {
     torsoAngleStabilizerGainSlider.oninput = function() {
         torsoAngleStabilizerK = this.value * 100;
         torsoAngleStabilizerC = this.value * 10;
-        document.getElementById('torsoStabilizerGainValue').innerHTML = "Strength: " + this.value;
+        torsoStabilizerGainVal.innerHTML = "Strength: " + this.value;
+    };
+
+    // Turn on/off torso angle stabilization controller.
+    torsoVerticalStabilizerCheckbox.oninput = function() {
+        torsoVerticalStabilization = torsoVerticalStabilizerCheckbox.checked;
+        torsoVerticalStabilizerGainSlider.hidden = !torsoVerticalStabilization;
+        torsoVertStabilizerGainVal.hidden = !torsoVerticalStabilization;
+        torsoVertStabilizerGainVal.innerHTML = "Strength: " + torsoVerticalStabilizerGainSlider.value;
+        torsoVerticalStabilizerK = torsoAngleStabilizerGainSlider.value * 0.6;
+        torsoVerticalStabilizerC = torsoAngleStabilizerGainSlider.value * 0.06;
+    };
+
+    torsoVerticalStabilizerGainSlider.oninput = function() {
+        torsoVerticalStabilizerK = this.value * 0.6;
+        torsoVerticalStabilizerC = this.value * 0.06;
+        torsoVertStabilizerGainVal.innerHTML = "Strength: " + this.value;
     };
 
     sequenceGoButton.onclick = function() {

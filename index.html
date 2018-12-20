@@ -24,7 +24,7 @@
 </div>
 
 <!-- Slider container -->
-<button class="collapsible">Expand options</button>
+<button class="collapsible">Runner modifier options</button>
 <div class="content">
     <div class="slidecontainer">
         Vertical gravity (default 10): <span id="yGravityVal"></span>
@@ -41,13 +41,23 @@
     <div class="slidecontainer">
         <input type="checkbox" id="usePointFeet">Use point-feet (default false)?<br>
     </div>
+</div>
+
+<!-- "Hand of god" controller container -->
+<button class="collapsible">"Hand of god" stabilizers</button>
+<div class="content">
     <div class="slidecontainer">
         <input type="checkbox" id="useTorsoAngleStabilizer">Use torso angle stabilizer (default false)? <span id="torsoStabilizerGainValue" hidden></span></span><br>
         <input type="range" min="0" max="100" value="10" class="slider" id="torsoStabilizerGainSlider" hidden>
     </div>
 
+    <div class="slidecontainer">
+        <input type="checkbox" id="useTorsoVerticalStabilizer">Use torso vertical position stabilizer (default false)? <span id="torsoVertStabilizerGainVal" hidden></span></span><br>
+        <input type="range" min="0" max="100" value="10" class="slider" id="torsoVerticalStabilizerSlider" hidden>
+    </div>
 </div>
 
+<!-- Entering series of commands. -->
 <button class="collapsible">Command queueing</button>
 <div class="content">
     <div class="slidecontainer">
